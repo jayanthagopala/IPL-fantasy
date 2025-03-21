@@ -1,0 +1,108 @@
+/* IPL Schedule Styling */
+.ipl-header {
+    background: linear-gradient(90deg, #0e3577 0%, #1a4d9e 100%);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  .ipl-card {
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    background-color: white;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .ipl-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .ipl-table th {
+    background-color: #f0f4f8;
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 15px;
+    border: 1px solid #e2e8f0;
+  }
+  
+  .ipl-table td {
+    padding: 10px 15px;
+    border: 1px solid #e2e8f0;
+  }
+  
+  .ipl-table tr:nth-child(even) {
+    background-color: #f9fafb;
+  }
+  
+  .ipl-table tr:hover {
+    background-color: #f0f4f8;
+  }
+  
+  .filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f8fafc;
+    border-radius: 6px;
+    align-items: center;
+  }
+  
+  .filter-select {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    background-color: white;
+    min-width: 150px;
+  }
+  
+  .team-tag {
+    border-left: 4px solid;
+    padding-left: 10px;
+  }
+  
+  /* Team colors */
+  .team-kkr { border-color: #3A225D; }
+  .team-rcb { border-color: #EC1C24; }
+  .team-srh { border-color: #FF822A; }
+  .team-rr { border-color: #254AA5; }
+  .team-csk { border-color: #FFFF00; }
+  .team-mi { border-color: #004BA0; }
+  .team-dc { border-color: #0078BC; }
+  .team-lsg { border-color: #A0E1F5; }
+  .team-gt { border-color: #1B2133; }
+  .team-pbks { border-color: #ED1B24; }
+  
+  /* Playoff matches highlighting */
+  .playoff-match {
+    font-weight: bold;
+    background-color: #fffbeb !important;
+  }
+  
+  .playoff-match td {
+    border-color: #fcd34d;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .filter-container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .filter-select {
+      width: 100%;
+    }
+    
+    .ipl-table {
+      font-size: 14px;
+    }
+    
+    .ipl-table th, .ipl-table td {
+      padding: 8px;
+    }
+  }

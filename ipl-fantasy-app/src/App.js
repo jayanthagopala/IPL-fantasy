@@ -1,23 +1,22 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import IPLSchedule from './components/IPLSchedule';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+      <header className="App-header" style={{ height: 'auto', minHeight: '150px', padding: '20px' }}>
+        <h1>IPL 2025 Schedule Viewer</h1>
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Browse the complete 2025 Indian Premier League cricket tournament schedule
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
       </header>
+      <main className="App-content">
+        <IPLSchedule />
+      </main>
+      <footer className="App-footer" style={{ padding: '20px', marginTop: '30px', textAlign: 'center', backgroundColor: '#f0f0f0' }}>
+        <p>Data from IPLT20.COM - Unofficial schedule viewer</p>
+      </footer>
     </div>
   );
 }
