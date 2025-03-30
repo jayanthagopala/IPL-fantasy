@@ -1,41 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
 .App {
   text-align: center;
+  font-family: 'Poppins', sans-serif;
 }
 
 .App-header {
-  background-color: #1e3a8a;
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
   min-height: 20vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 2rem 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.App-header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .tabs {
   margin-top: 20px;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .tab {
-  padding: 10px 20px;
-  margin: 0 10px;
+  padding: 12px 24px;
   font-size: 1rem;
+  font-weight: 500;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
-  background-color: #1e40af;
+  background: rgba(255, 255, 255, 0.1);
   color: white;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .tab.active {
-  background-color: #60a5fa;
-  color: white;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .tab:hover {
-  background-color: #3b82f6;
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
 }
 
 .content {
@@ -48,50 +70,126 @@
   margin: 0 auto;
 }
 
-.standings-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  background: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+.standings-container {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #f6f8fc 0%, #f0f4f8 100%);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
-.standings-table th,
-.standings-table td {
-  padding: 12px 16px;
-  text-align: left;
-  border-bottom: 1px solid #e5e7eb;
+.standings-title {
+  text-align: center;
+  color: #2d3748;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.standings-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .standings-table th {
-  background-color: #f8fafc;
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  color: white;
+  padding: 1.2rem;
   font-weight: 600;
-  color: #1e40af;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .standings-table td {
-  color: #1f2937;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 1.1rem;
 }
 
-.standings-table td.positive {
-  color: #059669;
+.standings-row {
+  transition: all 0.2s ease;
+}
+
+.standings-row:hover {
+  background-color: #f8fafc;
+  transform: translateY(-2px);
+}
+
+.rank-cell {
+  font-weight: 700;
+  color: #4a5568;
+  font-size: 1.2rem;
+}
+
+.team-cell {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.points-cell {
+  color: #4a5568;
   font-weight: 500;
 }
 
-.standings-table td.negative {
-  color: #dc2626;
-  font-weight: 500;
+.money-cell {
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-align: right;
 }
 
-.standings-table tr:last-child td {
-  border-bottom: none;
+.money-cell.positive {
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  color: white;
 }
 
-.standings h2 {
-  color: #1e40af;
-  margin-bottom: 20px;
+.money-cell.negative {
+  background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+  color: white;
+}
+
+/* Add animation for loading state */
+.loading {
   text-align: center;
+  padding: 2rem;
+  color: #4a5568;
+  font-size: 1.2rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .standings-container {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .standings-title {
+    font-size: 2rem;
+  }
+
+  .standings-table th,
+  .standings-table td {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
 }
 
 .schedule-list {
@@ -209,80 +307,95 @@
 }
 
 .points-table-container {
-  overflow-x: auto;
-  margin: 20px 0;
-  padding-bottom: 15px;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #f6f8fc 0%, #f0f4f8 100%);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
 .points-table {
   width: 100%;
-  border-collapse: collapse;
-  white-space: nowrap;
-  font-size: 14px;
-}
-
-.points-table th,
-.points-table td {
-  padding: 10px;
-  text-align: center;
-  border: 1px solid #e5e7eb;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .points-table th {
-  background-color: #f8fafc;
-  font-weight: 600;
-  color: #1e40af;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-
-.points-table thead tr:first-child th {
-  background-color: #1e40af;
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
   color: white;
+  padding: 1.2rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.points-table td:first-child {
-  position: sticky;
-  left: 0;
+.points-table td {
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 1.1rem;
+}
+
+.points-table tr:hover {
   background-color: #f8fafc;
-  z-index: 1;
-  font-weight: 500;
-  text-align: left;
-  min-width: 200px;
+  transition: all 0.2s ease;
 }
 
 .points-table td.positive {
-  color: #059669;
-  font-weight: 500;
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  color: white;
+  border-radius: 8px;
 }
 
 .points-table td.negative {
-  color: #dc2626;
-  font-weight: 500;
+  background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+  color: white;
+  border-radius: 8px;
 }
 
-/* Add horizontal scrolling indicator */
-.points-table-container::after {
-  content: '← Scroll horizontally →';
-  display: block;
-  text-align: center;
-  color: #6b7280;
-  padding: 10px;
-  font-size: 0.9em;
-}
-
-@media (min-width: 1024px) {
-  .points-table-container::after {
-    display: none;
+/* Add some animation to the header */
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 
-.loading {
-  text-align: center;
-  padding: 40px;
-  color: #6b7280;
-  font-size: 1.1rem;
+.App-header {
+  background-size: 200% 200%;
+  animation: gradientAnimation 15s ease infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .App-header h1 {
+    font-size: 2rem;
+  }
+  
+  .tab {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+  
+  .points-table-container {
+    padding: 1rem;
+  }
+  
+  .points-table th,
+  .points-table td {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
 }
 
 .error-message {
@@ -534,4 +647,18 @@
 .calculated-points:before {
   content: "Prize Money: ";
   color: #64748b;
+}
+
+/* Add these styles for the match points table */
+.points-table td:first-child {
+  font-weight: 600;
+  color: #1e40af;
+  white-space: nowrap;
+  min-width: 120px;
+}
+
+/* Style for playoff matches */
+.points-table td:first-child[data-playoff="true"] {
+  color: #2563eb;
+  font-weight: 700;
 } 

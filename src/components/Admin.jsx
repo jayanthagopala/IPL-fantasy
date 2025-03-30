@@ -24,9 +24,31 @@ function Admin() {
     'Anantha Team'       // Anantha
   ];
   
+  const teamShortNames = {
+    'Royal Challengers Bengaluru': 'RCB',
+    'Kolkata Knight Riders': 'KKR',
+    'Chennai Super Kings': 'CSK',
+    'Mumbai Indians': 'MI',
+    'Sunrisers Hyderabad': 'SRH',
+    'Rajasthan Royals': 'RR',
+    'Delhi Capitals': 'DC',
+    'Punjab Kings': 'PBKS',
+    'Lucknow Super Giants': 'LSG',
+    'Gujarat Titans': 'GT'
+  };
+
+  const formatMatchName = (match) => {
+    if (!match.homeTeam || !match.awayTeam) {
+      return `Match ${match.matchNo}: ${match.homeTeam}`; // For playoff matches
+    }
+    const homeTeam = teamShortNames[match.homeTeam] || match.homeTeam;
+    const awayTeam = teamShortNames[match.awayTeam] || match.awayTeam;
+    return `${homeTeam} vs ${awayTeam}`;
+  };
+
   const matches = iplSchedule.matches.map(match => ({
     id: match.matchNo,
-    name: `Match ${match.matchNo}: ${match.date} - ${match.homeTeam} vs ${match.awayTeam}`
+    name: formatMatchName(match)
   }));
 
   const rankToPoints = {

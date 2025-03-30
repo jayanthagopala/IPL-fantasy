@@ -19,6 +19,40 @@ function MatchPoints() {
     'Anantha Team'
   ];
 
+  // Add team name mapping
+  const teamShortNames = {
+    'Royal Challengers Bengaluru': 'RCB',
+    'Kolkata Knight Riders': 'KKR',
+    'Chennai Super Kings': 'CSK',
+    'Mumbai Indians': 'MI',
+    'Sunrisers Hyderabad': 'SRH',
+    'Rajasthan Royals': 'RR',
+    'Delhi Capitals': 'DC',
+    'Punjab Kings': 'PBKS',
+    'Lucknow Super Giants': 'LSG',
+    'Gujarat Titans': 'GT'
+  };
+
+  // Function to format match name
+  const formatMatchName = (matchName) => {
+    // Extract team names from the match name
+    const teamRegex = /Match \d+: \d{2}-[A-Za-z]+-\d{2} - (.*?) vs (.*?)$/;
+    const matches = matchName.match(teamRegex);
+    
+    if (matches && matches.length === 3) {
+      const team1 = matches[1];
+      const team2 = matches[2];
+      return `${teamShortNames[team1] || team1} vs ${teamShortNames[team2] || team2}`;
+    }
+    
+    // For playoff matches
+    if (matchName.includes('Qualifier') || matchName.includes('Eliminator') || matchName.includes('Final')) {
+      return matchName.split(':')[0]; // Return just "Qualifier 1", "Eliminator", etc.
+    }
+    
+    return matchName;
+  };
+
   useEffect(() => {
     fetchMatchPoints();
   }, []);
@@ -56,7 +90,7 @@ function MatchPoints() {
               ))}
             </tr>
             <tr>
-              <th></th> {/* Empty cell for match column */}
+              <th></th>
               {players.map(player => (
                 <React.Fragment key={player}>
                   <th>Dream11</th>
@@ -68,7 +102,7 @@ function MatchPoints() {
           <tbody>
             {matchesData.map((match) => (
               <tr key={match.matchId}>
-                <td>{match.matchName}</td>
+                <td>{formatMatchName(match.matchName)}</td>
                 {players.map(player => {
                   const playerData = match.points[player] || {};
                   return (

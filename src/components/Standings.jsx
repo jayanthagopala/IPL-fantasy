@@ -57,25 +57,30 @@ function Standings() {
   if (error) return <div className="error-message">{error}</div>;
 
   return (
-    <div className="standings">
-      <h2>Fantasy Standings</h2>
+    <div className="standings-container">
+      <h2 className="standings-title">🏆 Fantasy Standings</h2>
       <table className="standings-table">
         <thead>
           <tr>
             <th>Rank</th>
             <th>Team</th>
-            <th>Dream11 Points</th>
-            <th>Total Money</th>
+            <th>Dream11 Points 🎮</th>
+            <th>Total Money 💰</th>
           </tr>
         </thead>
         <tbody>
           {standings.map((item, index) => (
-            <tr key={item.player}>
-              <td>{index + 1}</td>
-              <td>{item.player}</td>
-              <td>{item.dream11Points}</td>
-              <td className={item.money >= 0 ? 'positive' : 'negative'}>
-                ₹{item.money}
+            <tr key={item.player} className="standings-row">
+              <td className="rank-cell">
+                {index === 0 && "🥇"}
+                {index === 1 && "🥈"}
+                {index === 2 && "🥉"}
+                {index > 2 && `#${index + 1}`}
+              </td>
+              <td className="team-cell">{item.player}</td>
+              <td className="points-cell">{item.dream11Points} pts</td>
+              <td className={`money-cell ${item.money >= 0 ? 'positive' : 'negative'}`}>
+                {item.money >= 0 ? '↗' : '↙'} ₹{Math.abs(item.money)}
               </td>
             </tr>
           ))}
