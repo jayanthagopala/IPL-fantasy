@@ -74,6 +74,24 @@ function MatchPoints() {
     }
   };
 
+  const getMoneyClass = (points) => {
+    if (!points) return '';
+    
+    const value = parseInt(points);
+    
+    if (value === 50) return 'money-50';
+    if (value === 20) return 'money-20';
+    if (value === 5) return 'money-5';
+    if (value === 0) return 'money-0';
+    if (value === -5) return 'money-neg-5';
+    if (value === -10) return 'money-neg-10';
+    if (value === -15) return 'money-neg-15';
+    if (value === -20) return 'money-neg-20';
+    if (value === -25) return 'money-neg-25';
+    
+    return '';
+  };
+
   if (loading) return <div className="loading">Loading match points...</div>;
   if (error) return <div className="error-message">{error}</div>;
 
@@ -108,7 +126,7 @@ function MatchPoints() {
                   return (
                     <React.Fragment key={player}>
                       <td>{playerData.rawScore?.toFixed(1) || '-'}</td>
-                      <td className={playerData.points > 0 ? 'positive' : playerData.points < 0 ? 'negative' : ''}>
+                      <td className={getMoneyClass(playerData.points)}>
                         {playerData.points ? `₹${playerData.points}` : '-'}
                       </td>
                     </React.Fragment>

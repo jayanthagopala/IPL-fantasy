@@ -346,16 +346,57 @@
   transition: all 0.2s ease;
 }
 
-.points-table td.positive {
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+.points-table td.positive,
+.points-table td.negative {
   color: white;
   border-radius: 8px;
+  font-weight: 600;
+  text-align: center;
 }
 
-.points-table td.negative {
-  background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+.points-table td.money-50 {
+  background: linear-gradient(135deg, #166534 0%, #15803d 100%);
   color: white;
-  border-radius: 8px;
+}
+
+.points-table td.money-20 {
+  background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+  color: white;
+}
+
+.points-table td.money-5 {
+  background: linear-gradient(135deg, #22c55e 0%, #4ade80 100%);
+  color: white;
+}
+
+.points-table td.money-0 {
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.points-table td.money-neg-5 {
+  background: linear-gradient(135deg, #fca5a5 0%, #f87171 100%);
+  color: white;
+}
+
+.points-table td.money-neg-10 {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+.points-table td.money-neg-15 {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: white;
+}
+
+.points-table td.money-neg-20 {
+  background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+  color: white;
+}
+
+.points-table td.money-neg-25 {
+  background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%);
+  color: white;
 }
 
 /* Add some animation to the header */
