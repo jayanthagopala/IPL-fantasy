@@ -42,47 +42,56 @@
   padding: 20px;
 }
 
+.standings {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
 .standings-table {
-  margin: 20px auto;
+  width: 100%;
   border-collapse: collapse;
-  width: 80%;
-  max-width: 600px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-top: 20px;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }
 
 .standings-table th,
 .standings-table td {
-  padding: 12px;
-  border: 1px solid #ddd;
-  text-align: center;
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .standings-table th {
-  background-color: #1e3a8a;
-  color: white;
+  background-color: #f8fafc;
+  font-weight: 600;
+  color: #1e40af;
+}
+
+.standings-table td {
+  color: #1f2937;
+}
+
+.standings-table td.positive {
+  color: #059669;
   font-weight: 500;
 }
 
-.standings-table tr:nth-child(even) {
-  background-color: #f0f9ff;
-}
-
-.standings-table tr:hover {
-  background-color: #dbeafe;
-}
-
-.standings-table td:first-child {
-  font-weight: bold;
-  color: #444;
-}
-
-.standings-table td:last-child {
+.standings-table td.negative {
+  color: #dc2626;
   font-weight: 500;
-  color: #666;
 }
 
-.standings-table td:last-child:before {
-  content: attr(data-points);
+.standings-table tr:last-child td {
+  border-bottom: none;
+}
+
+.standings h2 {
+  color: #1e40af;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .schedule-list {
