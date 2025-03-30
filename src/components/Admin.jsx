@@ -12,7 +12,17 @@ function Admin() {
   const [allMatchPoints, setAllMatchPoints] = useState({});
   const [successMessage, setSuccessMessage] = useState('');
 
-  const players = ['Jaya', 'Justin', 'Ram', 'Sibi', 'Sundar', 'Sampath', 'Jayanth', 'Vicky', 'Anantha'];
+  const players = [
+    'JAYAGAN ARMY',      // Jaya
+    'JUSTIN CHALLENGERS', // Justin
+    'Devilish 11',       // Ram
+    'CheemaRajah',       // Sibi
+    'Sundar Night Fury', // Sundar
+    'Garuda Tejas',      // Sampath
+    'Jais Royal Challengers', // Jayanth
+    'Vjvignesh94',         // Vicky (fixed spelling)
+    'Anantha Team'       // Anantha
+  ];
   
   const matches = iplSchedule.matches.map(match => ({
     id: match.matchNo,
@@ -20,15 +30,15 @@ function Admin() {
   }));
 
   const rankToPoints = {
-    1: 50,
-    2: 20,
-    3: 5,
-    4: 0,
-    5: -5,
-    6: -10,
-    7: -15,
-    8: -20,
-    9: -25
+    1: 50,   // ₹50
+    2: 20,   // ₹20
+    3: 5,    // ₹5
+    4: 0,    // ₹0
+    5: -5,   // -₹5
+    6: -10,  // -₹10
+    7: -15,  // -₹15
+    8: -20,  // -₹20
+    9: -25   // -₹25
   };
 
   // Load existing data when component mounts
@@ -52,13 +62,25 @@ function Admin() {
 
   const savePointsToDynamoDB = async (matchData) => {
     try {
+      // Calculate ranked points based on raw scores
+      const rankedPoints = calculateRankPoints(playerPoints);
+
+      // Create the final points object that includes both raw scores and calculated points
+      const finalPoints = {};
+      Object.entries(playerPoints).forEach(([player, data]) => {
+        finalPoints[player] = {
+          rawScore: data.points, // Store the raw Dream11 score
+          points: rankedPoints[player].points // Store the calculated prize money
+        };
+      });
+
       const params = {
         TableName: "IPL-fantasy-2025",
         Item: {
           pk: `MATCH#${matchData.matchId}`,
           matchId: matchData.matchId,
           matchName: matchData.matchName,
-          points: matchData.points,
+          points: finalPoints,
           timestamp: new Date().toISOString()
         }
       };
@@ -91,17 +113,35 @@ function Admin() {
   const handleMatchSelect = async (e) => {
     const matchId = e.target.value;
     setSelectedMatch(matchId);
-    
+    setPlayerPoints({}); // Clear existing points
+
     if (matchId) {
-      // Try to load points from DynamoDB
-      const matchData = await loadPointsFromDynamoDB(matchId);
-      if (matchData) {
-        setPlayerPoints(matchData.points);
-      } else {
-        setPlayerPoints({});
+      try {
+        const params = {
+          TableName: "IPL-fantasy-2025",
+          Key: {
+            pk: `MATCH#${matchId}`
+          }
+        };
+
+        const { Item } = await ddbDocClient.send(new GetCommand(params));
+        
+        if (Item?.points) {
+          // Convert the stored data format to match input fields format
+          const inputPoints = {};
+          Object.entries(Item.points).forEach(([player, data]) => {
+            inputPoints[player] = {
+              points: data.rawScore || 0, // Use rawScore instead of calculated points
+              prize: 0
+            };
+          });
+          setPlayerPoints(inputPoints);
+          console.log('Loaded existing match data:', inputPoints);
+        }
+      } catch (error) {
+        console.error("Error fetching match data:", error);
+        setError("Failed to load existing match data");
       }
-    } else {
-      setPlayerPoints({});
     }
   };
 
@@ -109,8 +149,8 @@ function Admin() {
     setPlayerPoints(prev => ({
       ...prev,
       [player]: {
-        points: parseInt(value) || 0,
-        prize: 0 // You can add prize input if needed
+        points: parseFloat(value) || 0,
+        prize: 0
       }
     }));
   };
@@ -145,21 +185,14 @@ function Admin() {
         return;
       }
 
-      // Calculate ranked points based on raw scores
-      const rankedPoints = calculateRankPoints(playerPoints);
-
       const matchData = {
         matchId: selectedMatch,
-        matchName: matches.find(m => m.id.toString() === selectedMatch)?.name || '',
-        points: rankedPoints,
-        timestamp: new Date().toISOString()
+        matchName: matches.find(m => m.id.toString() === selectedMatch)?.name || ''
       };
 
       await savePointsToDynamoDB(matchData);
       
-      // Clear form and show success message
-      setPlayerPoints({});
-      setSuccessMessage('Points saved successfully!');
+      setSuccessMessage('Match points saved successfully!');
       setError('');
 
       // Clear success message after 3 seconds
@@ -195,21 +228,13 @@ function Admin() {
       ) : (
         <div className="admin-content">
           <h2>Match Points Entry</h2>
-          {successMessage && (
-            <div className="success-message">
-              {successMessage}
-            </div>
-          )}
-          {error && (
-            <div className="error-message">
-              {error}
-            </div>
-          )}
+          {successMessage && <div className="success-message">{successMessage}</div>}
+          {error && <div className="error-message">{error}</div>}
           <div className="match-selector">
-            <select 
-              value={selectedMatch} 
-              onChange={handleMatchSelect}
+            <select
               className="match-dropdown"
+              value={selectedMatch}
+              onChange={handleMatchSelect}
             >
               <option value="">Select a match</option>
               {matches.map(match => (
@@ -222,20 +247,35 @@ function Admin() {
 
           {selectedMatch && (
             <div className="points-entry-form">
-              <h3>Enter Raw Scores</h3>
+              <h3>Enter Dream11 Scores</h3>
+              <div className="points-info">
+                <p>Enter each player's Dream11 score. Prize money will be calculated based on rankings:</p>
+                <ul>
+                  <li>1st Place: ₹50</li>
+                  <li>2nd Place: ₹20</li>
+                  <li>3rd Place: ₹5</li>
+                  <li>4th Place: ₹0</li>
+                  <li>5th Place: -₹5</li>
+                  <li>6th Place: -₹10</li>
+                  <li>7th Place: -₹15</li>
+                  <li>8th Place: -₹20</li>
+                  <li>9th Place: -₹25</li>
+                </ul>
+              </div>
               <div className="players-grid">
                 {players.map(player => (
                   <div key={player} className="player-input">
                     <label>{player}</label>
                     <input
                       type="number"
+                      step="0.1"
                       value={playerPoints[player]?.points || ''}
                       onChange={(e) => handlePointsChange(player, e.target.value)}
-                      placeholder="0"
+                      placeholder="Enter Dream11 score"
                     />
                     {playerPoints[player]?.points && (
                       <div className="calculated-points">
-                        Final Points: {calculateRankPoints(playerPoints)[player]?.points || 0}
+                        Prize Money: ₹{calculateRankPoints(playerPoints)[player]?.points || 0}
                       </div>
                     )}
                   </div>
