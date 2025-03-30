@@ -1,9 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { ddbDocClient } from '../config/aws-config';
+import { Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
+
+// Register ChartJS components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 function Standings() {
   const [standings, setStandings] = useState([]);
+  const [progressionData, setProgressionData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -18,29 +41,48 @@ function Standings() {
       };
 
       const { Items } = await ddbDocClient.send(new ScanCommand(params));
+      const sortedMatches = Items.sort((a, b) => Number(a.matchId) - Number(b.matchId));
       
-      // Calculate total money and Dream11 points for each player
-      const totals = {};
-      
-      Items.forEach(match => {
+      // Calculate cumulative totals for each player
+      const playerProgression = {};
+      const matchLabels = [];
+
+      sortedMatches.forEach(match => {
+        matchLabels.push(`Match ${match.matchId}`);
         Object.entries(match.points || {}).forEach(([player, data]) => {
-          if (!totals[player]) {
-            totals[player] = {
-              money: 0,
-              dream11Points: 0
+          if (!playerProgression[player]) {
+            playerProgression[player] = {
+              data: [],
+              total: 0
             };
           }
-          totals[player].money += data.points || 0;
-          totals[player].dream11Points += data.rawScore || 0;
+          playerProgression[player].total += data.points || 0;
+          playerProgression[player].data.push(playerProgression[player].total);
         });
       });
 
-      // Convert to array and sort by money (descending)
-      const standingsArray = Object.entries(totals)
+      // Prepare chart data
+      const chartData = {
+        labels: matchLabels,
+        datasets: Object.entries(playerProgression).map(([player, data], index) => ({
+          label: player,
+          data: data.data,
+          borderColor: getPlayerColor(index),
+          backgroundColor: getPlayerColor(index),
+          tension: 0.4,
+          pointRadius: 3,
+          pointHoverRadius: 6
+        }))
+      };
+
+      setProgressionData(chartData);
+
+      // Calculate final standings
+      const standingsArray = Object.entries(playerProgression)
         .map(([player, data]) => ({
           player,
-          money: data.money,
-          dream11Points: parseFloat(data.dream11Points.toFixed(1))
+          money: data.total,
+          dream11Points: calculateDream11Points(player, sortedMatches)
         }))
         .sort((a, b) => b.money - a.money);
 
@@ -50,6 +92,91 @@ function Standings() {
       console.error("Error calculating standings:", error);
       setError("Failed to load standings");
       setLoading(false);
+    }
+  };
+
+  const calculateDream11Points = (player, matches) => {
+    return matches.reduce((total, match) => {
+      return total + (match.points[player]?.rawScore || 0);
+    }, 0);
+  };
+
+  const getPlayerColor = (index) => {
+    const colors = [
+      '#2563eb', '#dc2626', '#059669', '#d97706', 
+      '#7c3aed', '#db2777', '#0891b2', '#4f46e5',
+      '#ea580c'
+    ];
+    return colors[index % colors.length];
+  };
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          usePointStyle: true,
+          boxWidth: 6,
+          font: {
+            family: 'Poppins',
+            size: 12
+          }
+        }
+      },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        titleColor: '#1e40af',
+        bodyColor: '#1e40af',
+        borderColor: '#e2e8f0',
+        borderWidth: 1,
+        padding: 12,
+        bodyFont: {
+          family: 'Poppins'
+        },
+        titleFont: {
+          family: 'Poppins',
+          weight: 600
+        },
+        callbacks: {
+          label: (context) => {
+            return `${context.dataset.label}: ₹${context.parsed.y}`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false
+        },
+        ticks: {
+          font: {
+            family: 'Poppins',
+            size: 12
+          }
+        }
+      },
+      y: {
+        grid: {
+          color: '#e2e8f0'
+        },
+        ticks: {
+          font: {
+            family: 'Poppins',
+            size: 12
+          },
+          callback: (value) => `₹${value}`
+        }
+      }
+    },
+    interaction: {
+      mode: 'nearest',
+      axis: 'x',
+      intersect: false
     }
   };
 
@@ -86,6 +213,15 @@ function Standings() {
           ))}
         </tbody>
       </table>
+      
+      <div className="standings-chart-container">
+        <h3 className="chart-title">Money Progression</h3>
+        <div className="chart-wrapper">
+          {progressionData && (
+            <Line data={progressionData} options={chartOptions} />
+          )}
+        </div>
+      </div>
     </div>
   );
 }
