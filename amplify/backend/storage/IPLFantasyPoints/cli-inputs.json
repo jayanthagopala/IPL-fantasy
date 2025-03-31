@@ -1,0 +1,10 @@
+{
+  "resourceName": "IPLFantasyPoints",
+  "tableName": "IPLFantasyPoints",
+  "partitionKey": {
+    "fieldName": "pk",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

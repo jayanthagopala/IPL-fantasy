@@ -1,0 +1,39 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-iplfantasy-dev-15ee7-authRole",
+      "UnauthRoleArn": "arn:aws:iam::891377069081:role/amplify-iplfantasy-dev-15ee7-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::891377069081:role/amplify-iplfantasy-dev-15ee7-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "amplify-iplfantasy-dev-15ee7-deployment",
+      "UnauthRoleName": "amplify-iplfantasy-dev-15ee7-unauthRole",
+      "StackName": "amplify-iplfantasy-dev-15ee7",
+      "StackId": "arn:aws:cloudformation:eu-west-1:891377069081:stack/amplify-iplfantasy-dev-15ee7/e7a23890-0e0c-11f0-a314-02804506e155",
+      "AmplifyAppId": "d15k9dszlxo98z",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-iplfantasy-dev-15ee7-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+    },
+    "categories": {
+      "function": {
+        "iplFantasyPointsFunction": {
+          "deploymentBucketName": "amplify-iplfantasy-dev-15ee7-deployment",
+          "s3Key": "amplify-builds/iplFantasyPointsFunction-4d5652587130586f776a-build.zip"
+        }
+      },
+      "auth": {
+        "iplfantasy": {}
+      },
+      "storage": {
+        "IPLFantasyPoints": {}
+      },
+      "api": {
+        "iplfantasy": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d15k9dszlxo98z",
+          "type": "manual"
+        }
+      }
+    }
+  }
+}
