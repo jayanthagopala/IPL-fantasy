@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import ScheduleDisplay from './components/ScheduleDisplay';
+import Schedule from './components/Schedule';
 
 function App() {
   return (
@@ -8,7 +8,9 @@ function App() {
       <header className="App-header">
         <h1>IPL 2025 Schedule</h1>
       </header>
-      <ScheduleDisplay />
+      <main>
+        <Schedule />
+      </main>
     </div>
   );
 }

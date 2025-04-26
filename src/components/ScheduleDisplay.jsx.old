@@ -1,21 +1,9 @@
 import React, { useState } from 'react';
 import scheduleJson from './ipl-schedule-json.json';
+import standingsData from './game-standings.json';
 
 const ScheduleDisplay = () => {
   const [expandedMatch, setExpandedMatch] = useState(null);
-  
-  // Teams for the leaderboard
-  const teams = [
-    "Anantha Team",
-    "JUSTIN CHALLENGERS",
-    "Sundar Night Fury",
-    "JAYAGAN ARMY", 
-    "Vjvignesh94",
-    "Devilish 11",
-    "CheemsRajah",
-    "Jais Royal Challengers",
-    "Garuda Tejas"
-  ];
   
   // Toggle match expansion
   const toggleMatch = (matchNo) => {
@@ -26,21 +14,26 @@ const ScheduleDisplay = () => {
     }
   };
   
-  // Generate random points for demonstration
-  const generateRandomPoints = () => {
-    return Math.floor(Math.random() * 100) + 50; // Random points between 50-150
-  };
-  
-  // Generate leaderboard data for a match
-  const generateLeaderboard = () => {
-    // Create array with teams and random points
-    const leaderboardData = teams.map(team => ({
-      teamName: team,
-      points: generateRandomPoints()
-    }));
+  // Get standings for a specific match
+  const getStandingsForMatch = (matchNo) => {
+    // Check if standings data is properly structured
+    if (!standingsData || !standingsData.standings || !Array.isArray(standingsData.standings)) {
+      return [];
+    }
     
-    // Sort by points in descending order
-    return leaderboardData.sort((a, b) => b.points - a.points);
+    // Find the standings entry for this match number
+    const matchStanding = standingsData.standings.find(
+      standing => standing && standing.matchNo === matchNo
+    );
+    
+    // If no specific standings exist for this match, use the default
+    if (!matchStanding || !matchStanding.teams) {
+      return standingsData.defaultStanding && standingsData.defaultStanding.teams 
+        ? standingsData.defaultStanding.teams 
+        : [];
+    }
+    
+    return matchStanding.teams;
   };
 
   // Group matches by month
@@ -76,11 +69,15 @@ const ScheduleDisplay = () => {
     return grouped;
   };
 
+  // Check if schedule data is available
   if (!scheduleJson || !scheduleJson.matches) {
     return <div className="error-message">No schedule data available</div>;
   }
 
   const groupedMatches = groupMatchesByMonth(scheduleJson.matches);
+
+  // Remove any undefined values
+  // standingsData.standings = standingsData.standings ? standingsData.standings.filter(Boolean) : [];
 
   return (
     <div className="schedule-container">
@@ -117,12 +114,14 @@ const ScheduleDisplay = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {generateLeaderboard().map((team, index) => (
-                          <tr key={team.teamName} className={index < 3 ? 'top-team' : ''}>
-                            <td>{index + 1}</td>
-                            <td>{team.teamName}</td>
-                            <td>{team.points}</td>
-                          </tr>
+                        {getStandingsForMatch(match.matchNo).map((team) => (
+                          team && team.teamName ? (
+                            <tr key={team.teamName} className={team.rank <= 3 ? 'top-team' : ''}>
+                              <td>{team.rank}</td>
+                              <td>{team.teamName}</td>
+                              <td>{team.points}</td>
+                            </tr>
+                          ) : null
                         ))}
                       </tbody>
                     </table>
