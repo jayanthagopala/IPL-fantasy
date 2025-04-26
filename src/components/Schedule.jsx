@@ -31,6 +31,55 @@ const Schedule = () => {
     return matchStanding.teams;
   };
 
+  // Check if data exists for a match
+  const hasMatchData = (matchNo) => {
+    return getStandingsForMatch(matchNo) !== null;
+  };
+
+  // Get medal for rank
+  const getMedalForRank = (rank) => {
+    switch(rank) {
+      case 1:
+        return '🥇';
+      case 2:
+        return '🥈';
+      case 3:
+        return '🥉';
+      default:
+        return rank;
+    }
+  };
+
+  // Calculate money earned/lost based on rank
+  const getMoneyForRank = (rank) => {
+    switch(rank) {
+      case 1: return 50;
+      case 2: return 20;
+      case 3: return 5;
+      case 4: return 0;
+      case 5: return -5;
+      case 6: return -10;
+      case 7: return -15;
+      case 8: return -20;
+      case 9: return -25;
+      default: return 0;
+    }
+  };
+
+  // Format money value with + or - sign
+  const formatMoney = (value) => {
+    if (value > 0) return `+₹${value}`;
+    if (value < 0) return `-₹${Math.abs(value)}`;
+    return `₹${value}`;
+  };
+
+  // Get CSS class for team row based on rank
+  const getTeamRowClass = (rank) => {
+    if (rank <= 3) return 'top-team';
+    if (rank === 4) return 'fourth-team';
+    return 'bottom-team';
+  };
+
   // Group matches by month
   const groupMatchesByMonth = (matches) => {
     const grouped = {};
@@ -99,7 +148,10 @@ const Schedule = () => {
             <div className="month-section" key={month}>
               <h2 className="month-title">{month}</h2>
               {matches.map((match) => (
-                <div className="match-card" key={match.matchNo}>
+                <div 
+                  className={`match-card ${hasMatchData(match.matchNo) ? 'has-data' : ''}`} 
+                  key={match.matchNo}
+                >
                   <div className="match-header" onClick={() => toggleMatch(match.matchNo)}>
                     <div className="match-info">
                       <div className="match-number">Match {match.matchNo}</div>
@@ -117,7 +169,7 @@ const Schedule = () => {
                   
                   {expandedMatch === match.matchNo && (
                     <div className="leaderboard-container">
-                      <h3 className="leaderboard-title">Fantasy Points</h3>
+                      <h3 className="leaderboard-title">Fantasy Points & Earnings</h3>
                       {getStandingsForMatch(match.matchNo) ? (
                         <table className="leaderboard-table">
                           <thead>
@@ -125,15 +177,19 @@ const Schedule = () => {
                               <th>Rank</th>
                               <th>Team</th>
                               <th>Points</th>
+                              <th>Earnings</th>
                             </tr>
                           </thead>
                           <tbody>
                             {getStandingsForMatch(match.matchNo).map((team, index) => (
                               team && team.teamName ? (
-                                <tr key={`${team.teamName}-${index}`} className={team.rank <= 3 ? 'top-team' : ''}>
-                                  <td>{team.rank}</td>
+                                <tr key={`${team.teamName}-${index}`} className={getTeamRowClass(team.rank)}>
+                                  <td className="rank-cell">{getMedalForRank(team.rank)}</td>
                                   <td>{team.teamName}</td>
                                   <td>{team.points}</td>
+                                  <td className={getMoneyForRank(team.rank) > 0 ? 'money-gain' : getMoneyForRank(team.rank) < 0 ? 'money-loss' : ''}>
+                                    {formatMoney(getMoneyForRank(team.rank))}
+                                  </td>
                                 </tr>
                               ) : null
                             ))}

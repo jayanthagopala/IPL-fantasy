@@ -103,6 +103,12 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Highlight matches with available data */
+.match-card.has-data {
+  background-color: #f0fdf4;
+  border-left: 4px solid #22c55e;
+}
+
 .match-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -195,6 +201,7 @@
   border: 1px dashed #e5e7eb;
 }
 
+/* Leaderboard table */
 .leaderboard-table {
   width: 100%;
   border-collapse: collapse;
@@ -220,13 +227,49 @@
   border-bottom: none;
 }
 
+/* Money gain/loss styling */
+.money-gain {
+  color: #16a34a !important;
+  font-weight: 600;
+}
+
+.money-loss {
+  color: #dc2626 !important;
+  font-weight: 600;
+}
+
+/* Medal cell styling */
+.rank-cell {
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+/* Top 3 ranks - darker green */
 .leaderboard-table .top-team {
-  background-color: #f0fdf4;
+  background-color: #dcfce7;
 }
 
 .leaderboard-table .top-team td {
   color: #166534;
   font-weight: 500;
+}
+
+/* 4th rank - white */
+.leaderboard-table .fourth-team {
+  background-color: #ffffff;
+}
+
+.leaderboard-table .fourth-team td {
+  color: #1f2937;
+}
+
+/* Bottom ranks - light red */
+.leaderboard-table .bottom-team {
+  background-color: #fef2f2;
+}
+
+.leaderboard-table .bottom-team td {
+  color: #991b1b;
 }
 
 /* Main Content */
