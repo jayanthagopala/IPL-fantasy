@@ -17,17 +17,15 @@ const Schedule = () => {
   // Get standings for a specific match
   const getStandingsForMatch = (matchNo) => {
     if (!standingsData || !standingsData.standings || !Array.isArray(standingsData.standings)) {
-      return [];
+      return null;
     }
     
     const matchStanding = standingsData.standings.find(
       standing => standing && standing.matchNo === matchNo
     );
     
-    if (!matchStanding || !matchStanding.teams) {
-      return standingsData.defaultStanding && standingsData.defaultStanding.teams 
-        ? standingsData.defaultStanding.teams 
-        : [];
+    if (!matchStanding || !matchStanding.teams || !Array.isArray(matchStanding.teams) || matchStanding.teams.length === 0) {
+      return null;
     }
     
     return matchStanding.teams;
@@ -120,26 +118,30 @@ const Schedule = () => {
                   {expandedMatch === match.matchNo && (
                     <div className="leaderboard-container">
                       <h3 className="leaderboard-title">Fantasy Points</h3>
-                      <table className="leaderboard-table">
-                        <thead>
-                          <tr>
-                            <th>Rank</th>
-                            <th>Team</th>
-                            <th>Points</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {getStandingsForMatch(match.matchNo).map((team, index) => (
-                            team && team.teamName ? (
-                              <tr key={`${team.teamName}-${index}`} className={team.rank <= 3 ? 'top-team' : ''}>
-                                <td>{team.rank}</td>
-                                <td>{team.teamName}</td>
-                                <td>{team.points}</td>
-                              </tr>
-                            ) : null
-                          ))}
-                        </tbody>
-                      </table>
+                      {getStandingsForMatch(match.matchNo) ? (
+                        <table className="leaderboard-table">
+                          <thead>
+                            <tr>
+                              <th>Rank</th>
+                              <th>Team</th>
+                              <th>Points</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {getStandingsForMatch(match.matchNo).map((team, index) => (
+                              team && team.teamName ? (
+                                <tr key={`${team.teamName}-${index}`} className={team.rank <= 3 ? 'top-team' : ''}>
+                                  <td>{team.rank}</td>
+                                  <td>{team.teamName}</td>
+                                  <td>{team.points}</td>
+                                </tr>
+                              ) : null
+                            ))}
+                          </tbody>
+                        </table>
+                      ) : (
+                        <div className="no-data-message">Match data not available</div>
+                      )}
                     </div>
                   )}
                 </div>

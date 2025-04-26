@@ -184,6 +184,17 @@
   margin: 0 0 12px 0;
 }
 
+/* No data message */
+.no-data-message {
+  padding: 20px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  color: #6b7280;
+  font-style: italic;
+  text-align: center;
+  border: 1px dashed #e5e7eb;
+}
+
 .leaderboard-table {
   width: 100%;
   border-collapse: collapse;
