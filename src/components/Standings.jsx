@@ -12,6 +12,7 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
+import { get, post } from 'aws-amplify/api';
 
 // Register ChartJS components
 ChartJS.register(
@@ -36,61 +37,37 @@ function Standings() {
 
   const calculateStandings = async () => {
     try {
-      const params = {
-        TableName: "IPL-fantasy-2025"
-      };
-
-      const { Items } = await ddbDocClient.send(new ScanCommand(params));
-      const sortedMatches = Items.sort((a, b) => Number(a.matchId) - Number(b.matchId));
-      
-      // Calculate cumulative totals for each player
-      const playerProgression = {};
-      const matchLabels = [];
-
-      sortedMatches.forEach(match => {
-        matchLabels.push(`Match ${match.matchId}`);
-        Object.entries(match.points || {}).forEach(([player, data]) => {
-          if (!playerProgression[player]) {
-            playerProgression[player] = {
-              data: [],
-              total: 0
-            };
-          }
-          playerProgression[player].total += data.points || 0;
-          playerProgression[player].data.push(playerProgression[player].total);
-        });
+      console.log('Fetching standings...');
+      const response = await get({
+        apiName: 'iplfantasy',
+        path: '/items'
       });
-
-      // Prepare chart data
-      const chartData = {
-        labels: matchLabels,
-        datasets: Object.entries(playerProgression).map(([player, data], index) => ({
-          label: player,
-          data: data.data,
-          borderColor: getPlayerColor(index),
-          backgroundColor: getPlayerColor(index),
-          tension: 0.4,
-          pointRadius: 3,
-          pointHoverRadius: 6
-        }))
-      };
-
-      setProgressionData(chartData);
-
-      // Calculate final standings
-      const standingsArray = Object.entries(playerProgression)
-        .map(([player, data]) => ({
-          player,
-          money: data.total,
-          dream11Points: calculateDream11Points(player, sortedMatches)
-        }))
-        .sort((a, b) => b.money - a.money);
-
+      console.log('Received response:', response);
+      
+      // Ensure we have an array to work with
+      let standingsArray = [];
+      if (response) {
+        if (Array.isArray(response)) {
+          standingsArray = response;
+        } else if (typeof response === 'object') {
+          // If it's an object with items property
+          if (response.items) {
+            standingsArray = response.items;
+          } else {
+            // If it's just an object of items
+            standingsArray = Object.values(response);
+          }
+        }
+      }
+      
+      // Sort the standings by money (descending)
+      standingsArray.sort((a, b) => (b.money || 0) - (a.money || 0));
+      
       setStandings(standingsArray);
       setLoading(false);
-    } catch (error) {
-      console.error("Error calculating standings:", error);
-      setError("Failed to load standings");
+    } catch (err) {
+      console.error('Error fetching standings:', err);
+      setError(err.message);
       setLoading(false);
     }
   };
@@ -177,6 +154,22 @@ function Standings() {
       mode: 'nearest',
       axis: 'x',
       intersect: false
+    }
+  };
+
+  // Example POST request
+  const addItem = async (newItem) => {
+    try {
+      const response = await post({
+        apiName: 'iplfantasy',
+        path: '/items',
+        options: {
+          body: newItem
+        }
+      });
+      // Handle response
+    } catch (err) {
+      // Handle error
     }
   };
 

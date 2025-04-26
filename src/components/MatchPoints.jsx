@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { ScanCommand } from "@aws-sdk/lib-dynamodb";
-import { ddbDocClient } from '../config/aws-config';
 
 function MatchPoints() {
   const [matchesData, setMatchesData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const players = [
@@ -19,60 +17,43 @@ function MatchPoints() {
     'Anantha Team'
   ];
 
-  // Add team name mapping
-  const teamShortNames = {
-    'Royal Challengers Bengaluru': 'RCB',
-    'Kolkata Knight Riders': 'KKR',
-    'Chennai Super Kings': 'CSK',
-    'Mumbai Indians': 'MI',
-    'Sunrisers Hyderabad': 'SRH',
-    'Rajasthan Royals': 'RR',
-    'Delhi Capitals': 'DC',
-    'Punjab Kings': 'PBKS',
-    'Lucknow Super Giants': 'LSG',
-    'Gujarat Titans': 'GT'
-  };
-
-  // Function to format match name
-  const formatMatchName = (matchName) => {
-    // Extract team names from the match name
-    const teamRegex = /Match \d+: \d{2}-[A-Za-z]+-\d{2} - (.*?) vs (.*?)$/;
-    const matches = matchName.match(teamRegex);
-    
-    if (matches && matches.length === 3) {
-      const team1 = matches[1];
-      const team2 = matches[2];
-      return `${teamShortNames[team1] || team1} vs ${teamShortNames[team2] || team2}`;
-    }
-    
-    // For playoff matches
-    if (matchName.includes('Qualifier') || matchName.includes('Eliminator') || matchName.includes('Final')) {
-      return matchName.split(':')[0]; // Return just "Qualifier 1", "Eliminator", etc.
-    }
-    
-    return matchName;
-  };
-
   useEffect(() => {
-    fetchMatchPoints();
+    // Create dummy match data
+    const dummyMatches = [
+      {
+        matchId: '1',
+        matchName: 'Match 1: RCB vs MI',
+        points: {
+          'JAYAGAN ARMY': { rawScore: 120.5, points: 50 },
+          'JUSTIN CHALLENGERS': { rawScore: 110.2, points: 20 },
+          'Devilish 11': { rawScore: 105.8, points: 5 },
+          'CheemaRajah': { rawScore: 100.1, points: 0 },
+          'Sundar Night Fury': { rawScore: 95.3, points: -5 },
+          'Garuda Tejas': { rawScore: 90.7, points: -10 },
+          'Jais Royal Challengers': { rawScore: 85.2, points: -15 },
+          'Vjvignesh94': { rawScore: 80.6, points: -20 },
+          'Anantha Team': { rawScore: 75.9, points: -25 }
+        }
+      },
+      {
+        matchId: '2',
+        matchName: 'Match 2: CSK vs KKR',
+        points: {
+          'JAYAGAN ARMY': { rawScore: 115.3, points: 20 },
+          'JUSTIN CHALLENGERS': { rawScore: 125.7, points: 50 },
+          'Devilish 11': { rawScore: 110.2, points: 5 },
+          'CheemaRajah': { rawScore: 105.8, points: 0 },
+          'Sundar Night Fury': { rawScore: 100.1, points: -5 },
+          'Garuda Tejas': { rawScore: 95.3, points: -10 },
+          'Jais Royal Challengers': { rawScore: 90.7, points: -15 },
+          'Vjvignesh94': { rawScore: 85.2, points: -20 },
+          'Anantha Team': { rawScore: 80.6, points: -25 }
+        }
+      }
+    ];
+
+    setMatchesData(dummyMatches);
   }, []);
-
-  const fetchMatchPoints = async () => {
-    try {
-      const params = {
-        TableName: "IPL-fantasy-2025"
-      };
-
-      const { Items } = await ddbDocClient.send(new ScanCommand(params));
-      const sortedMatches = Items.sort((a, b) => Number(a.matchId) - Number(b.matchId));
-      setMatchesData(sortedMatches);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching match points:", error);
-      setError("Failed to load match points");
-      setLoading(false);
-    }
-  };
 
   const getMoneyClass = (points) => {
     if (!points) return '';
@@ -120,7 +101,7 @@ function MatchPoints() {
           <tbody>
             {matchesData.map((match) => (
               <tr key={match.matchId}>
-                <td>{formatMatchName(match.matchName)}</td>
+                <td>{match.matchName}</td>
                 {players.map(player => {
                   const playerData = match.points[player] || {};
                   return (
