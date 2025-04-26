@@ -1,9 +1,35 @@
-import React, { useState } from 'react';
-import scheduleJson from './ipl-schedule-json.json';
-import standingsData from './game-standings.json';
+import React, { useState, useEffect } from 'react';
+import { fetchJsonFromS3 } from '../services/S3Service';
 
 const Schedule = () => {
   const [expandedMatch, setExpandedMatch] = useState(null);
+  const [scheduleJson, setScheduleJson] = useState(null);
+  const [standingsData, setStandingsData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // Fetch data from S3
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        
+        // Fetch data from S3
+        const scheduleData = await fetchJsonFromS3('ipl-schedule-json.json');
+        const standings = await fetchJsonFromS3('game-standings.json');
+        
+        setScheduleJson(scheduleData);
+        setStandingsData(standings);
+      } catch (err) {
+        console.error('Error fetching data from S3:', err);
+        setError('Failed to load data from S3. Please try again later or check your network connection.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchData();
+  }, []);
   
   // Toggle match expansion
   const toggleMatch = (matchNo) => {
@@ -82,6 +108,8 @@ const Schedule = () => {
 
   // Group matches by month
   const groupMatchesByMonth = (matches) => {
+    if (!matches) return {};
+    
     const grouped = {};
     
     matches.forEach(match => {
@@ -128,6 +156,17 @@ const Schedule = () => {
     return grouped;
   };
 
+  // Show loading state
+  if (isLoading) {
+    return <div className="loading-message">Loading schedule data from S3...</div>;
+  }
+
+  // Show error state
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
+
+  // Show error if schedule data is missing
   if (!scheduleJson || !scheduleJson.matches) {
     return <div className="error-message">No schedule data available</div>;
   }
