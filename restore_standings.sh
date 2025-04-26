@@ -1,3 +1,6 @@
+#!/bin/sh
+# Restore the original sample data to game-standings.json
+cat > public/s3-data/game-standings.json << 'JSONEOF'
 {
   "standings": [
     {
@@ -50,3 +53,5 @@
     ]
   }
 }
+JSONEOF
+echo "Restored sample data to public/s3-data/game-standings.json" 

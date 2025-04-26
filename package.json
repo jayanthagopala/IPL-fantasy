@@ -43,5 +43,14 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jayanthagopala/IPL-fantasy.git"
+  },
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/jayanthagopala/IPL-fantasy/issues"
+  },
+  "homepage": "/"
 }

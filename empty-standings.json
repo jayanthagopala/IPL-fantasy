@@ -1,0 +1,16 @@
+{
+  "standings": [],
+  "defaultStanding": {
+    "teams": [
+      { "teamName": "Anantha Team", "points": 0, "rank": 1 },
+      { "teamName": "JUSTIN CHALLENGERS", "points": 0, "rank": 2 },
+      { "teamName": "Sundar Night Fury", "points": 0, "rank": 3 },
+      { "teamName": "JAYAGAN ARMY", "points": 0, "rank": 4 },
+      { "teamName": "Vjvignesh94", "points": 0, "rank": 5 },
+      { "teamName": "Devilish 11", "points": 0, "rank": 6 },
+      { "teamName": "CheemsRajah", "points": 0, "rank": 7 },
+      { "teamName": "Jais Royal Challengers", "points": 0, "rank": 8 },
+      { "teamName": "Garuda Tejas", "points": 0, "rank": 9 }
+    ]
+  }
+} 

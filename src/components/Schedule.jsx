@@ -40,26 +40,45 @@ const Schedule = () => {
     }
   };
   
-  // Get standings for a specific match
-  const getStandingsForMatch = (matchNo) => {
+  // Get match data for a specific match
+  const getMatchData = (matchNo) => {
     if (!standingsData || !standingsData.standings || !Array.isArray(standingsData.standings)) {
       return null;
     }
     
-    const matchStanding = standingsData.standings.find(
+    return standingsData.standings.find(
       standing => standing && standing.matchNo === matchNo
     );
+  };
+  
+  // Get standings for a specific match
+  const getStandingsForMatch = (matchNo) => {
+    const matchData = getMatchData(matchNo);
     
-    if (!matchStanding || !matchStanding.teams || !Array.isArray(matchStanding.teams) || matchStanding.teams.length === 0) {
+    if (!matchData || !matchData.teams || !Array.isArray(matchData.teams) || matchData.teams.length === 0) {
       return null;
     }
     
-    return matchStanding.teams;
+    return matchData.teams;
   };
 
   // Check if data exists for a match
   const hasMatchData = (matchNo) => {
-    return getStandingsForMatch(matchNo) !== null;
+    return getMatchData(matchNo) !== null;
+  };
+  
+  // Check if match info exists for a match
+  const hasMatchInfo = (matchNo) => {
+    const matchData = getMatchData(matchNo);
+    return matchData && matchData.match_info && matchData.match_info.team_1 && matchData.match_info.team_2;
+  };
+
+  // Check if any team in a match has a note
+  const hasNotes = (matchNo) => {
+    const teams = getStandingsForMatch(matchNo);
+    if (!teams || !Array.isArray(teams)) return false;
+    
+    return teams.some(team => team && team.note);
   };
 
   // Get medal for rank
@@ -202,12 +221,27 @@ const Schedule = () => {
                       </div>
                     </div>
                     <button className="expand-button">
-                      {expandedMatch === match.matchNo ? 'Hide Leaderboard' : 'Show Leaderboard'}
+                      {expandedMatch === match.matchNo ? 'Hide Details' : 'Show Details'}
                     </button>
                   </div>
                   
                   {expandedMatch === match.matchNo && (
                     <div className="leaderboard-container">
+                      {hasMatchInfo(match.matchNo) ? (
+                        <div className="match-result-info">
+                          <h4>Match Result</h4>
+                          <div className="match-scores">
+                            <p><strong>{getMatchData(match.matchNo)?.match_info?.team_1}</strong>: {getMatchData(match.matchNo)?.match_info?.team_1_score}</p>
+                            <p><strong>{getMatchData(match.matchNo)?.match_info?.team_2}</strong>: {getMatchData(match.matchNo)?.match_info?.team_2_score}</p>
+                            <p className="match-result">{getMatchData(match.matchNo)?.match_info?.result}</p>
+                          </div>
+                        </div>
+                      ) : hasMatchData(match.matchNo) && (
+                        <div className="no-match-info">
+                          <p>Match results not available</p>
+                        </div>
+                      )}
+                      
                       <h3 className="leaderboard-title">Fantasy Points & Earnings</h3>
                       {getStandingsForMatch(match.matchNo) ? (
                         <table className="leaderboard-table">
@@ -217,6 +251,9 @@ const Schedule = () => {
                               <th>Team</th>
                               <th>Points</th>
                               <th>Earnings</th>
+                              {hasNotes(match.matchNo) && (
+                                <th>Note</th>
+                              )}
                             </tr>
                           </thead>
                           <tbody>
@@ -229,6 +266,9 @@ const Schedule = () => {
                                   <td className={getMoneyForRank(team.rank) > 0 ? 'money-gain' : getMoneyForRank(team.rank) < 0 ? 'money-loss' : ''}>
                                     {formatMoney(getMoneyForRank(team.rank))}
                                   </td>
+                                  {hasNotes(match.matchNo) && (
+                                    <td>{team.note || ''}</td>
+                                  )}
                                 </tr>
                               ) : null
                             ))}

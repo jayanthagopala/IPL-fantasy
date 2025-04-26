@@ -121,3 +121,163 @@ After each match, update the standings data by:
    ```bash
    aws s3 cp game-standings.json s3://your-bucket-name/game-standings.json --content-type application/json
    ```
+
+# IPL Fantasy Standings Lambda Updater
+
+This project contains an AWS Lambda function that securely updates IPL fantasy standings data stored in an S3 bucket.
+
+## Prerequisites
+
+- AWS CLI installed and configured
+- Node.js 14+ installed
+- Basic knowledge of AWS Lambda, S3, and API Gateway
+
+## Files Overview
+
+- `update-standings-lambda.js` - The Lambda function code
+- `deploy-lambda.sh` - Deployment script to set up the Lambda function on AWS
+
+## Setup Instructions
+
+1. Make sure you have AWS CLI installed and configured with appropriate credentials:
+   ```
+   aws configure
+   ```
+
+2. Make the deployment script executable:
+   ```
+   chmod +x deploy-lambda.sh
+   ```
+
+3. Run the deployment script:
+   ```
+   ./deploy-lambda.sh
+   ```
+   
+   This script will:
+   - Create an IAM role with appropriate permissions
+   - Install necessary dependencies
+   - Package the Lambda function code
+   - Deploy the function to AWS Lambda
+   - Optionally set up an API Gateway endpoint
+
+4. When prompted, choose whether you want to set up an API Gateway trigger for the Lambda function.
+
+## Usage
+
+### Option 1: Using the Lambda function directly via AWS Console
+
+1. Navigate to the Lambda function in the AWS Console
+2. Create a test event with the following format:
+   ```json
+   {
+     "matchNo": 42,
+     "leaderboard": [
+       {
+         "username": "player1",
+         "points": 120,
+         "rank": 1
+       },
+       {
+         "username": "player2",
+         "points": 115,
+         "rank": 2
+       },
+       ...
+     ]
+   }
+   ```
+3. Run the test to update the standings.
+
+### Option 2: Using API Gateway (if configured)
+
+If you set up an API Gateway endpoint during deployment, you can update standings by making a POST request to the provided endpoint:
+
+```bash
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{
+    "matchNo": 42,
+    "leaderboard": [
+      {
+        "username": "player1",
+        "points": 120,
+        "rank": 1
+      },
+      {
+        "username": "player2",
+        "points": 115,
+        "rank": 2
+      }
+    ]
+  }' \
+  https://YOUR-API-GATEWAY-URL/prod/update-standings
+```
+
+Replace `YOUR-API-GATEWAY-URL` with the URL provided after deployment.
+
+### Option 3: Using AWS SDK in your application
+
+You can also invoke the Lambda function directly from your application using the AWS SDK:
+
+```javascript
+const { LambdaClient, InvokeCommand } = require("@aws-sdk/client-lambda");
+
+const client = new LambdaClient({ region: "eu-west-1" });
+
+const params = {
+  FunctionName: "ipl-fantasy-standings-updater",
+  Payload: JSON.stringify({
+    matchNo: 42,
+    leaderboard: [
+      {
+        username: "player1",
+        points: 120,
+        rank: 1
+      },
+      {
+        username: "player2",
+        points: 115,
+        rank: 2
+      }
+    ]
+  })
+};
+
+const command = new InvokeCommand(params);
+const response = await client.send(command);
+```
+
+## Data Format
+
+The Lambda function expects input in the following format:
+
+```json
+{
+  "matchNo": 42, // Match number
+  "leaderboard": [
+    {
+      "username": "player1", // Player username
+      "points": 120,         // Player's total points
+      "rank": 1              // Player's rank
+    },
+    ...
+  ]
+}
+```
+
+The function will store standings data in the S3 bucket specified in the Lambda environment variables:
+- Bucket: `ipl-fantasy-data-2025`
+- File: `game-standings.json`
+
+## Security Considerations
+
+- The Lambda function assumes the IAM role to access S3
+- API Gateway can be protected with additional authentication methods
+- Consider adding API keys or OAuth authentication for production use
+
+## Troubleshooting
+
+- Check CloudWatch Logs for detailed error messages
+- Verify the Lambda function has appropriate S3 permissions
+- Ensure the input JSON matches the expected format

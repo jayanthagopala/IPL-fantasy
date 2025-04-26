@@ -200,6 +200,46 @@
   color: #1e3a8a;
 }
 
+/* No match info */
+.no-match-info {
+  background-color: #f9fafb;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px dashed #e5e7eb;
+  color: #6b7280;
+  font-style: italic;
+  text-align: center;
+}
+
+/* Match result info */
+.match-result-info {
+  background-color: #eff6ff;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #dbeafe;
+}
+
+.match-result-info h4 {
+  color: #1e40af;
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.match-scores p {
+  margin: 5px 0;
+  font-size: 0.95rem;
+}
+
+.match-result {
+  font-weight: 600;
+  margin-top: 10px !important;
+  color: #1e3a8a;
+  font-style: italic;
+}
+
 /* Leaderboard section */
 .leaderboard-container {
   margin-top: 16px;
@@ -307,6 +347,127 @@ main {
   animation: fadeIn 0.5s ease;
 }
 
+/* Leaderboard Submission */
+.leaderboard-submission-container {
+  background-color: #f8fafc;
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.leaderboard-submission-container h2 {
+  color: #1e40af;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.match-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-bottom: 15px;
+}
+
+.json-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 0.9rem;
+  resize: vertical;
+  min-height: 200px;
+  background-color: #ffffff;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.validate-button, .submit-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.validate-button {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.validate-button:hover:not(:disabled) {
+  background-color: #e2e8f0;
+}
+
+.submit-button {
+  background-color: #1e40af;
+  color: white;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: #1e3a8a;
+}
+
+.validate-button:disabled, .submit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.success-message {
+  background-color: #dcfce7;
+  color: #166534;
+  padding: 12px;
+  border-radius: 6px;
+  margin: 15px 0;
+  font-weight: 500;
+}
+
+.data-preview {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.data-preview h3 {
+  color: #1e40af;
+  margin-bottom: 15px;
+  font-size: 1.25rem;
+}
+
+.data-preview h4 {
+  color: #4b5563;
+  margin: 15px 0 10px;
+  font-size: 1.1rem;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 5px;
+}
+
+.match-info-preview p {
+  margin: 8px 0;
+}
+
 /* Responsive layout */
 @media (max-width: 768px) {
   .App-header h1 {
@@ -350,5 +511,13 @@ main {
   .leaderboard-table td {
     padding: 8px;
     font-size: 0.85rem;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .validate-button, .submit-button {
+    width: 100%;
   }
 } 
