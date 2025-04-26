@@ -1,7 +1,7 @@
 {
-  "name": "localreactipl",
+  "name": "ipl-schedule",
   "version": "1.0.0",
-  "description": "",
+  "description": "IPL 2025 Schedule Viewer",
   "main": "index.js",
   "scripts": {
     "start": "react-scripts start",
@@ -9,19 +9,11 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "keywords": [],
+  "keywords": ["ipl", "cricket", "schedule"],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.777.0",
-    "@aws-sdk/credential-provider-node": "^3.777.0",
-    "@aws-sdk/credential-providers": "^3.778.0",
-    "@aws-sdk/lib-dynamodb": "^3.778.0",
-    "aws-amplify": "^6.14.1",
-    "aws-sdk": "^2.1692.0",
-    "chart.js": "^4.4.8",
     "react": "^19.1.0",
-    "react-chartjs-2": "^5.3.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {

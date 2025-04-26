@@ -3,447 +3,27 @@
 .App {
   text-align: center;
   font-family: 'Poppins', sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .App-header {
   background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-  min-height: 20vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   padding: 2rem 1rem;
-  position: relative;
-  overflow: hidden;
+  margin-bottom: 2rem;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .App-header h1 {
-  font-size: 3rem;
-  font-weight: 700;
-  margin: 0;
-  background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.tabs {
-  margin-top: 20px;
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.tab {
-  padding: 12px 24px;
-  font-size: 1rem;
-  font-weight: 500;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.tab.active {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.tab:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-1px);
-}
-
-.content {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-  overflow-x: auto;
-}
-
-.standings {
-  padding: 20px;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.standings-container {
-  padding: 2rem;
-  max-width: 1000px;
-  margin: 0 auto;
-  background: linear-gradient(135deg, #f6f8fc 0%, #f0f4f8 100%);
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-}
-
-.standings-title {
-  text-align: center;
-  color: #2d3748;
   font-size: 2.5rem;
-  margin-bottom: 2rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.standings-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  background: white;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-.standings-table th {
-  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-  color: white;
-  padding: 1.2rem;
-  font-weight: 600;
-  font-size: 1.1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.standings-table td {
-  padding: 1rem 1.2rem;
-  border-bottom: 1px solid #e2e8f0;
-  font-size: 1.1rem;
-}
-
-.standings-row {
-  transition: all 0.2s ease;
-}
-
-.standings-row:hover {
-  background-color: #f8fafc;
-  transform: translateY(-2px);
-}
-
-.rank-cell {
-  font-weight: 700;
-  color: #4a5568;
-  font-size: 1.2rem;
-}
-
-.team-cell {
-  font-weight: 600;
-  color: #2d3748;
-}
-
-.points-cell {
-  color: #4a5568;
-  font-weight: 500;
-}
-
-.money-cell {
-  font-weight: 700;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  text-align: right;
-}
-
-.money-cell.positive {
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-  color: white;
-}
-
-.money-cell.negative {
-  background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
-  color: white;
-}
-
-/* Add animation for loading state */
-.loading {
-  text-align: center;
-  padding: 2rem;
-  color: #4a5568;
-  font-size: 1.2rem;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.5; }
-  100% { opacity: 1; }
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .standings-container {
-    padding: 1rem;
-    border-radius: 12px;
-  }
-
-  .standings-title {
-    font-size: 2rem;
-  }
-
-  .standings-table th,
-  .standings-table td {
-    padding: 0.8rem;
-    font-size: 0.9rem;
-  }
-}
-
-.schedule-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.match-card {
-  background-color: #f0f9ff;
-  padding: 20px;
-  border-radius: 8px;
-  width: 80%;
-  max-width: 400px;
-  border-left: 4px solid #3b82f6;
-}
-
-.match-card p {
-  margin: 5px 0;
-}
-
-.schedule {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.schedule h2 {
-  color: #282c34;
-  margin-bottom: 30px;
-}
-
-.schedule-section {
-  margin-bottom: 40px;
-}
-
-.schedule-section h3 {
-  color: #282c34;
-  border-bottom: 2px solid #61dafb;
-  padding-bottom: 10px;
-  margin-bottom: 20px;
-}
-
-.month-section {
-  margin-bottom: 30px;
-}
-
-.month-section h4 {
-  color: #444;
-  margin: 20px 0;
-}
-
-.match-number {
-  color: #666;
-  font-weight: bold;
   margin: 0;
+  color: #ffffff;
 }
 
-.match-teams {
-  font-size: 1.1em;
-  color: #282c34;
-  margin: 5px 0;
-}
-
-.match-details {
-  color: #666;
-  font-size: 0.9em;
-  margin: 0;
-}
-
-.playoffs .match-card {
-  border-left-color: #2563eb;
-  background-color: #dbeafe;
-}
-
-.playoffs .final {
-  border-left-color: #1e3a8a;
-  background-color: #bfdbfe;
-}
-
-@media (max-width: 768px) {
-  .match-card {
-    padding: 10px 15px;
-  }
-
-  .match-teams {
-    font-size: 1em;
-  }
-
-  .match-details {
-    font-size: 0.8em;
-  }
-}
-
-.match-points {
-  padding: 20px 0;
-  width: 100%;
-}
-
-.match-card {
-  background: white;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.match-card h3 {
-  color: #1e40af;
-  margin-bottom: 15px;
-  font-size: 1.2rem;
-}
-
-.points-table-container {
-  padding: 1rem;
-  width: 100%;
-  background: linear-gradient(135deg, #f6f8fc 0%, #f0f4f8 100%);
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  overflow-x: auto;
-}
-
-.points-table {
-  min-width: 100%;
-  width: max-content;
-  border-collapse: separate;
-  border-spacing: 0;
-  background: white;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-.points-table th {
-  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-  color: white;
-  padding: 0.8rem;
-  font-weight: 600;
-  font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.points-table td {
-  padding: 0.8rem;
-  border-bottom: 1px solid #e2e8f0;
-  font-size: 0.95rem;
-  white-space: nowrap;
-}
-
-.points-table tr:hover {
-  background-color: #f8fafc;
-  transition: all 0.2s ease;
-}
-
-.points-table td.positive,
-.points-table td.negative {
-  color: white;
-  border-radius: 8px;
-  font-weight: 600;
-  text-align: center;
-}
-
-.points-table td.money-50 {
-  background: linear-gradient(135deg, #166534 0%, #15803d 100%);
-  color: white;
-}
-
-.points-table td.money-20 {
-  background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
-  color: white;
-}
-
-.points-table td.money-5 {
-  background: linear-gradient(135deg, #22c55e 0%, #4ade80 100%);
-  color: white;
-}
-
-.points-table td.money-0 {
-  background: #f8fafc;
-  color: #64748b;
-}
-
-.points-table td.money-neg-5 {
-  background: linear-gradient(135deg, #fca5a5 0%, #f87171 100%);
-  color: white;
-}
-
-.points-table td.money-neg-10 {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: white;
-}
-
-.points-table td.money-neg-15 {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-  color: white;
-}
-
-.points-table td.money-neg-20 {
-  background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
-  color: white;
-}
-
-.points-table td.money-neg-25 {
-  background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%);
-  color: white;
-}
-
-/* Add some animation to the header */
-@keyframes gradientAnimation {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.App-header {
-  background-size: 200% 200%;
-  animation: gradientAnimation 15s ease infinite;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .App-header h1 {
-    font-size: 2rem;
-  }
-  
-  .tab {
-    padding: 10px 20px;
-    font-size: 0.9rem;
-  }
-  
-  .points-table-container {
-    padding: 0.5rem;
-    border-radius: 12px;
-  }
-  
-  .points-table th,
-  .points-table td {
-    padding: 0.6rem;
-    font-size: 0.85rem;
-  }
-}
-
+/* Error state */
 .error-message {
   text-align: center;
   padding: 20px;
@@ -453,301 +33,96 @@
   margin: 20px;
 }
 
-/* Modern Admin Panel Styles */
-.admin-panel {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(30, 58, 138, 0.1);
+/* Schedule container */
+.schedule-container {
+  padding: 20px 0;
 }
 
-/* Login Form Styles */
-.admin-login {
-  background-color: #ffffff;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(30, 58, 138, 0.08);
-  text-align: center;
-}
-
-.admin-login h2 {
-  color: #1a1a1a;
-  margin-bottom: 30px;
-  font-size: 28px;
-  font-weight: 600;
-}
-
-.form-group {
-  margin-bottom: 25px;
-}
-
-.password-input {
-  width: 100%;
-  padding: 14px;
-  border: 2px solid #e1e1e1;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: all 0.3s ease;
-  outline: none;
-}
-
-.password-input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.login-button {
-  width: 100%;
-  padding: 14px;
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.login-button:hover {
-  background-color: #2563eb;
-  transform: translateY(-1px);
-}
-
-/* Admin Content Styles */
-.admin-content {
-  padding: 30px;
-}
-
-.admin-content h2 {
-  color: #1a1a1a;
-  margin-bottom: 30px;
-  font-size: 24px;
-  font-weight: 600;
-}
-
-/* Messages */
-.success-message {
-  background-color: #dbeafe;
-  color: #1e3a8a;
-  padding: 16px;
-  margin: 20px 0;
-  border-radius: 8px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.error-message {
-  background-color: #fee2e2;
-  color: #991b1b;
-  padding: 16px;
-  margin: 20px 0;
-  border-radius: 8px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Match Selector */
-.match-selector {
-  margin-bottom: 30px;
-}
-
-.match-dropdown {
-  width: 100%;
-  padding: 14px;
-  font-size: 16px;
-  border: 2px solid #e1e1e1;
-  border-radius: 8px;
-  background-color: white;
-  cursor: pointer;
-  outline: none;
-  transition: all 0.3s ease;
-}
-
-.match-dropdown:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-/* Points Entry Form */
-.points-entry-form {
-  background-color: #f0f9ff;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-}
-
-.points-entry-form h3 {
-  color: #1a1a1a;
-  margin-bottom: 25px;
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.players-grid {
+.schedule-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin: 20px 0;
-  max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
+  gap: 30px;
 }
 
-.player-input {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 15px;
-  padding: 10px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.player-input label {
-  flex: 1;
-  min-width: 200px;
-  font-weight: 500;
-  color: #1e40af;
-}
-
-.player-input input {
-  width: 100px;
-  padding: 8px;
-  border: 2px solid #e1e1e1;
-  border-radius: 6px;
-  font-size: 14px;
-  text-align: center;
-}
-
-.calculated-points {
-  min-width: 120px;
-  font-size: 0.9em;
-  color: #666;
-  text-align: right;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .admin-panel {
-    margin: 20px;
-    padding: 15px;
-  }
-
-  .admin-login {
-    padding: 30px 20px;
-  }
-
-  .admin-content {
-    padding: 20px;
-  }
-
-  .players-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 15px;
-  }
-
-  .player-input {
-    padding: 12px;
-  }
-}
-
-.points-info {
+/* Month sections */
+.month-section {
   background-color: #f8fafc;
-  padding: 15px 20px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.month-title {
+  color: #1e40af;
+  font-size: 1.8rem;
+  margin: 0 0 20px 0;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 10px;
+}
+
+/* Match cards */
+.match-card {
+  background-color: #ffffff;
+  padding: 16px;
   border-radius: 8px;
-  margin-bottom: 20px;
-  border: 1px solid #e2e8f0;
-}
-
-.points-info p {
-  margin-bottom: 10px;
-  color: #334155;
-}
-
-.points-info ul {
-  list-style: none;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
   gap: 8px;
+  border-left: 4px solid #3b82f6;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.points-info li {
-  color: #475569;
-  font-size: 0.9em;
+.match-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.player-input input::placeholder {
-  color: #94a3b8;
-  font-size: 0.9em;
-}
-
-.calculated-points:before {
-  content: "Prize Money: ";
-  color: #64748b;
-}
-
-/* Add these styles for the match points table */
-.points-table td:first-child {
+.match-number {
+  font-size: 0.9rem;
   font-weight: 600;
-  color: #1e40af;
-  white-space: nowrap;
-  min-width: 100px;
-  max-width: 120px;
+  color: #6b7280;
 }
 
-.points-table td:not(:first-child) {
-  min-width: 60px;
-}
-
-/* Style for playoff matches */
-.points-table td:first-child[data-playoff="true"] {
-  color: #2563eb;
-  font-weight: 700;
-}
-
-.standings-chart-container {
-  margin-top: 3rem;
-  padding: 2rem;
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-.chart-title {
-  text-align: center;
-  color: #1e40af;
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
+.match-teams {
+  font-size: 1.2rem;
   font-weight: 600;
+  color: #1e3a8a;
+  margin: 5px 0;
 }
 
-.chart-wrapper {
-  height: 400px;
-  position: relative;
-  margin: 0 auto;
+.match-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: #4b5563;
+  font-size: 0.9rem;
 }
 
+.match-date, .match-venue, .match-time {
+  padding: 4px 8px;
+  background-color: #f3f4f6;
+  border-radius: 4px;
+}
+
+/* Responsive layout */
 @media (max-width: 768px) {
-  .standings-chart-container {
-    padding: 1rem;
-    margin-top: 2rem;
+  .App-header h1 {
+    font-size: 1.8rem;
   }
-
-  .chart-wrapper {
-    height: 300px;
+  
+  .month-title {
+    font-size: 1.5rem;
   }
-
-  .chart-title {
-    font-size: 1.2rem;
-    margin-bottom: 1.5rem;
+  
+  .match-teams {
+    font-size: 1.1rem;
+  }
+  
+  .match-details {
+    flex-direction: column;
+    gap: 5px;
+    font-size: 0.85rem;
   }
 } 

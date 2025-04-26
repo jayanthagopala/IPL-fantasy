@@ -1,0 +1,55 @@
+[
+  {
+    "match_info": {
+      "team_1": "KKR",
+      "team_2": "SRH",
+      "team_1_score": "200-6 (20)",
+      "team_2_score": "120-10 (16.4)",
+      "result": "KKR beat SRH by 80 runs"
+    },
+    "leaderboard": [
+      {
+        "rank": 1,
+        "team_name": "Anantha Team",
+        "points": 782,
+        "note": "Winner"
+      },
+      {
+        "rank": 2,
+        "team_name": "CheemsRajah",
+        "points": 666
+      },
+      {
+        "rank": 3,
+        "team_name": "JUSTIN CHALLENGERS",
+        "points": 627.5
+      },
+      {
+        "rank": 4,
+        "team_name": "Devilish 11",
+        "points": 587.5
+      },
+      {
+        "rank": 5,
+        "team_name": "Vjvignesh94",
+        "points": 583
+      },
+      {
+        "rank": 6,
+        "team_name": "Garuda Tejas",
+        "points": 575.5
+      },
+      {
+        "rank": 7,
+        "team_name": "Jais Royal Challengers",
+        "points": 572.5
+      },
+      {
+        "rank": 8,
+        "team_name": "Sundar Night Fury",
+        "points": 433.5
+      }
+    ],
+    "timestamp": "2025-04-26T10:00:00.000Z"
+  }
+] 
