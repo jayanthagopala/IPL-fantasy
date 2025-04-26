@@ -21,6 +21,38 @@
   font-weight: 700;
   margin: 0;
   color: #ffffff;
+  margin-bottom: 20px;
+}
+
+/* Tabs Navigation */
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.tab-button {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.tab-button.active {
+  background-color: white;
+  color: #1e3a8a;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Error state */
@@ -186,10 +218,25 @@
   font-weight: 500;
 }
 
+/* Main Content */
+main {
+  min-height: 500px;
+  animation: fadeIn 0.5s ease;
+}
+
 /* Responsive layout */
 @media (max-width: 768px) {
   .App-header h1 {
     font-size: 1.8rem;
+  }
+  
+  .tabs {
+    gap: 10px;
+  }
+  
+  .tab-button {
+    padding: 8px 20px;
+    font-size: 0.9rem;
   }
   
   .month-title {
