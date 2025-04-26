@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Auth } from 'aws-amplify';
+import { fetchAuthSession, signIn } from 'aws-amplify/auth';
 
 function AuthWrapper({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -11,7 +11,7 @@ function AuthWrapper({ children }) {
 
   async function checkAuthState() {
     try {
-      await Auth.currentAuthenticatedUser();
+      await fetchAuthSession();
       setIsAuthenticated(true);
     } catch (err) {
       setIsAuthenticated(false);
@@ -38,7 +38,7 @@ function Login({ onLogin }) {
   async function handleLogin(e) {
     e.preventDefault();
     try {
-      await Auth.signIn(username, password);
+      await signIn({ username, password });
       onLogin();
     } catch (err) {
       setError(err.message);

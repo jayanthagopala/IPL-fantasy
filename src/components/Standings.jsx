@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { ScanCommand } from "@aws-sdk/lib-dynamodb";
-import { ddbDocClient } from '../config/aws-config';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -12,7 +10,6 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
-import { get, post } from 'aws-amplify/api';
 
 // Register ChartJS components
 ChartJS.register(
@@ -28,55 +25,37 @@ ChartJS.register(
 function Standings() {
   const [standings, setStandings] = useState([]);
   const [progressionData, setProgressionData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    calculateStandings();
+    // Use dummy data instead of API call
+    const dummyStandings = [
+      { player: 'JAYAGAN ARMY', dream11Points: 1250, money: 150 },
+      { player: 'JUSTIN CHALLENGERS', dream11Points: 1200, money: 120 },
+      { player: 'Devilish 11', dream11Points: 1150, money: 80 },
+      { player: 'CheemaRajah', dream11Points: 1100, money: 50 },
+      { player: 'Sundar Night Fury', dream11Points: 1050, money: 20 },
+      { player: 'Garuda Tejas', dream11Points: 1000, money: -10 },
+      { player: 'Jais Royal Challengers', dream11Points: 950, money: -20 },
+      { player: 'Vjvignesh94', dream11Points: 900, money: -30 },
+      { player: 'Anantha Team', dream11Points: 850, money: -40 }
+    ];
+
+    // Create dummy progression data
+    const dummyProgressionData = {
+      labels: ['Match 1', 'Match 2', 'Match 3', 'Match 4', 'Match 5'],
+      datasets: dummyStandings.map((player, index) => ({
+        label: player.player,
+        data: [0, 20, 40, 60, player.money],
+        borderColor: getPlayerColor(index),
+        tension: 0.1
+      }))
+    };
+
+    setStandings(dummyStandings);
+    setProgressionData(dummyProgressionData);
   }, []);
-
-  const calculateStandings = async () => {
-    try {
-      console.log('Fetching standings...');
-      const response = await get({
-        apiName: 'iplfantasy',
-        path: '/items'
-      });
-      console.log('Received response:', response);
-      
-      // Ensure we have an array to work with
-      let standingsArray = [];
-      if (response) {
-        if (Array.isArray(response)) {
-          standingsArray = response;
-        } else if (typeof response === 'object') {
-          // If it's an object with items property
-          if (response.items) {
-            standingsArray = response.items;
-          } else {
-            // If it's just an object of items
-            standingsArray = Object.values(response);
-          }
-        }
-      }
-      
-      // Sort the standings by money (descending)
-      standingsArray.sort((a, b) => (b.money || 0) - (a.money || 0));
-      
-      setStandings(standingsArray);
-      setLoading(false);
-    } catch (err) {
-      console.error('Error fetching standings:', err);
-      setError(err.message);
-      setLoading(false);
-    }
-  };
-
-  const calculateDream11Points = (player, matches) => {
-    return matches.reduce((total, match) => {
-      return total + (match.points[player]?.rawScore || 0);
-    }, 0);
-  };
 
   const getPlayerColor = (index) => {
     const colors = [
@@ -154,22 +133,6 @@ function Standings() {
       mode: 'nearest',
       axis: 'x',
       intersect: false
-    }
-  };
-
-  // Example POST request
-  const addItem = async (newItem) => {
-    try {
-      const response = await post({
-        apiName: 'iplfantasy',
-        path: '/items',
-        options: {
-          body: newItem
-        }
-      });
-      // Handle response
-    } catch (err) {
-      // Handle error
     }
   };
 

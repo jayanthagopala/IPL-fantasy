@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './App.css';
 import Standings from './components/Standings';
 import Schedule from './components/Schedule';
-import MatchPoints from './components/MatchPoints';
 import Admin from './components/Admin';
 
 function App() {
@@ -26,12 +25,6 @@ function App() {
             Schedule
           </button>
           <button 
-            className={`tab ${activeTab === 'matchPoints' ? 'active' : ''}`}
-            onClick={() => setActiveTab('matchPoints')}
-          >
-            Match Points
-          </button>
-          <button 
             className={`tab ${activeTab === 'admin' ? 'active' : ''}`}
             onClick={() => setActiveTab('admin')}
           >
@@ -41,8 +34,7 @@ function App() {
       </header>
       <main className="content">
         {activeTab === 'standings' ? <Standings /> : 
-         activeTab === 'schedule' ? <Schedule /> : 
-         activeTab === 'matchPoints' ? <MatchPoints /> : <Admin />}
+         activeTab === 'schedule' ? <Schedule /> : <Admin />}
       </main>
     </div>
   );
