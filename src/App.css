@@ -67,9 +67,6 @@
   border-radius: 8px;
   margin-bottom: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
   border-left: 4px solid #3b82f6;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -77,6 +74,18 @@
 .match-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Match header with info and button */
+.match-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.match-info {
+  flex: 1;
 }
 
 .match-number {
@@ -106,6 +115,77 @@
   border-radius: 4px;
 }
 
+/* Expand button */
+.expand-button {
+  background-color: #f3f4f6;
+  color: #4b5563;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.expand-button:hover {
+  background-color: #e5e7eb;
+  color: #1e3a8a;
+}
+
+/* Leaderboard section */
+.leaderboard-container {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed #e2e8f0;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.leaderboard-title {
+  font-size: 1.1rem;
+  color: #1e3a8a;
+  margin: 0 0 12px 0;
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.leaderboard-table th {
+  background-color: #f1f5f9;
+  color: #475569;
+  font-weight: 600;
+  padding: 10px;
+  text-align: left;
+}
+
+.leaderboard-table td {
+  padding: 10px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.leaderboard-table tr:last-child td {
+  border-bottom: none;
+}
+
+.leaderboard-table .top-team {
+  background-color: #f0fdf4;
+}
+
+.leaderboard-table .top-team td {
+  color: #166534;
+  font-weight: 500;
+}
+
 /* Responsive layout */
 @media (max-width: 768px) {
   .App-header h1 {
@@ -123,6 +203,22 @@
   .match-details {
     flex-direction: column;
     gap: 5px;
+    font-size: 0.85rem;
+  }
+  
+  .match-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .expand-button {
+    align-self: flex-end;
+  }
+  
+  .leaderboard-table th,
+  .leaderboard-table td {
+    padding: 8px;
     font-size: 0.85rem;
   }
 } 
