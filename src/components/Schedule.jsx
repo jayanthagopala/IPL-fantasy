@@ -67,6 +67,12 @@ const Schedule = () => {
     return getMatchData(matchNo) !== null;
   };
   
+  // Check if standings data exists for a match (for highlighting)
+  const hasStandingsData = (matchNo) => {
+    const standings = getStandingsForMatch(matchNo);
+    return standings !== null && standings.length > 0;
+  };
+  
   // Check if match info exists for a match
   const hasMatchInfo = (matchNo) => {
     const matchData = getMatchData(matchNo);
@@ -207,7 +213,7 @@ const Schedule = () => {
               <h2 className="month-title">{month}</h2>
               {matches.map((match) => (
                 <div 
-                  className={`match-card ${hasMatchData(match.matchNo) ? 'has-data' : ''}`} 
+                  className={`match-card ${hasStandingsData(match.matchNo) ? 'has-data' : ''}`} 
                   key={match.matchNo}
                 >
                   <div className="match-header" onClick={() => toggleMatch(match.matchNo)}>
