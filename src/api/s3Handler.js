@@ -1,49 +1,19 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+// S3 API handler for fetching and saving data
 const AWS = require('aws-sdk');
-const docClient = new AWS.DynamoDB.DocumentClient();
+require('dotenv').config();
+
+// Configure AWS SDK
+AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION || 'us-east-1'
+});
+
 const s3 = new AWS.S3();
+const BUCKET_NAME = process.env.S3_BUCKET_NAME;
 
-// Configure S3 bucket name - should match the one in frontend
-const BUCKET_NAME = 'ipl-fantasy-data-2025';
-
-const app = express();
-app.use(bodyParser.json());
-
-// DynamoDB routes
-app.get('/items', async function(req, res) {
-  const params = {
-    TableName: "IPL-fantasy-2025"
-  };
-  
-  try {
-    const data = await docClient.scan(params).promise();
-    res.json(data.Items);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Add POST route for /item
-app.post('/item', async function(req, res) {
-  console.log('Received POST request to /item:', req.body);
-  
-  try {
-    // You can add database operations here
-    // For now, just echo back the request
-    res.json({
-      success: true,
-      message: 'Item received',
-      data: req.body
-    });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// S3 routes
-// Get file from S3
-app.get('/s3/file', async function(req, res) {
+// Function to get a file from S3
+const getFileFromS3 = async (req, res) => {
   const { key } = req.query;
   
   if (!key) {
@@ -82,10 +52,10 @@ app.get('/s3/file', async function(req, res) {
       error: error.message
     });
   }
-});
+};
 
-// Save file to S3
-app.post('/s3/file', async function(req, res) {
+// Function to save a file to S3
+const saveFileToS3 = async (req, res) => {
   const { key, data } = req.body;
   
   if (!key || !data) {
@@ -117,10 +87,10 @@ app.post('/s3/file', async function(req, res) {
       error: error.message
     });
   }
-});
+};
 
-// List files in S3
-app.get('/s3/list', async function(req, res) {
+// Function to list files in a directory
+const listFilesInS3 = async (req, res) => {
   const { prefix } = req.query;
   
   const params = {
@@ -147,8 +117,10 @@ app.get('/s3/list', async function(req, res) {
       error: error.message
     });
   }
-});
+};
 
-// Add other CRUD operations as needed
-
-module.exports = app;
+module.exports = {
+  getFileFromS3,
+  saveFileToS3,
+  listFilesInS3
+}; 

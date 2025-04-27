@@ -1,1 +1,1 @@
-{"CORSRules":[{"AllowedOrigins":["*"],"AllowedHeaders":["*"],"AllowedMethods":["GET","HEAD","PUT","POST","DELETE"],"MaxAgeSeconds":3000,"ExposeHeaders":["Etag"]}]}
+{"CORSRules":[{"AllowedHeaders":["*"],"AllowedMethods":["GET","PUT","POST","DELETE","HEAD"],"AllowedOrigins":["*"],"ExposeHeaders":["ETag"]}]}

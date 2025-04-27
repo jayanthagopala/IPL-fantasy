@@ -433,6 +433,15 @@ main {
   cursor: not-allowed;
 }
 
+.error-message {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 12px;
+  border-radius: 6px;
+  margin: 15px 0;
+  font-weight: 500;
+}
+
 .success-message {
   background-color: #dcfce7;
   color: #166534;
@@ -466,6 +475,67 @@ main {
 
 .match-info-preview p {
   margin: 8px 0;
+}
+
+/* New styles for enhanced UI */
+.loading-inline {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 5px;
+  font-style: italic;
+}
+
+.existing-data-notice {
+  background-color: #eff6ff;
+  border: 1px solid #dbeafe;
+  border-radius: 6px;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  color: #1e40af;
+  font-size: 0.9rem;
+}
+
+.help-section {
+  background-color: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  margin-top: 30px;
+  padding-top: 20px;
+}
+
+.help-section h4 {
+  color: #4b5563;
+  margin-bottom: 10px;
+}
+
+.help-section p {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.help-section ul {
+  padding-left: 20px;
+  margin-top: 5px;
+}
+
+.help-section li {
+  margin-bottom: 5px;
+}
+
+.leaderboard-table .top-team {
+  background-color: #f0fdf4;
+}
+
+.leaderboard-table .top-team td {
+  color: #166534;
+}
+
+.leaderboard-table .bottom-team {
+  background-color: #fef2f2;
+}
+
+.leaderboard-table .bottom-team td {
+  color: #991b1b;
 }
 
 /* Responsive layout */

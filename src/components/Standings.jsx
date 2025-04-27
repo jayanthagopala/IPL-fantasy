@@ -1,66 +1,76 @@
 import React, { useState, useEffect } from 'react';
-import standingsData from './game-standings.json';
+import { fetchJsonFromS3 } from '../services/S3Service';
 import './Standings.css';
 
 const Standings = () => {
   const [overallStandings, setOverallStandings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [standingsData, setStandingsData] = useState(null);
 
   useEffect(() => {
-    try {
-      if (!standingsData || !standingsData.standings || !Array.isArray(standingsData.standings)) {
-        setError('No standings data available');
-        setIsLoading(false);
-        return;
-      }
-
-      // Calculate overall standings by summing points across all matches
-      const teamPointsMap = {};
-      const teamMatchesMap = {};
-      
-      // Process all matches
-      standingsData.standings.forEach(match => {
-        if (match && match.teams && Array.isArray(match.teams)) {
-          match.teams.forEach(team => {
-            if (team && team.teamName) {
-              // Initialize team in map if not exists
-              if (!teamPointsMap[team.teamName]) {
-                teamPointsMap[team.teamName] = 0;
-                teamMatchesMap[team.teamName] = 0;
-              }
-              
-              // Add points from this match
-              teamPointsMap[team.teamName] += team.points;
-              teamMatchesMap[team.teamName] += 1;
-            }
-          });
+    const loadStandingsData = async () => {
+      try {
+        setIsLoading(true);
+        // Fetch standings data from S3
+        const data = await fetchJsonFromS3('game-standings.json');
+        setStandingsData(data);
+        
+        if (!data || !data.standings || !Array.isArray(data.standings)) {
+          setError('No standings data available');
+          setIsLoading(false);
+          return;
         }
-      });
-      
-      // Convert to array for sorting
-      const teamsArray = Object.keys(teamPointsMap).map(teamName => ({
-        teamName,
-        totalPoints: teamPointsMap[teamName],
-        matchesPlayed: teamMatchesMap[teamName],
-        avgPoints: Math.round(teamPointsMap[teamName] / teamMatchesMap[teamName])
-      }));
-      
-      // Sort by total points (descending)
-      teamsArray.sort((a, b) => b.totalPoints - a.totalPoints);
-      
-      // Assign ranks
-      teamsArray.forEach((team, index) => {
-        team.rank = index + 1;
-      });
-      
-      setOverallStandings(teamsArray);
-      setIsLoading(false);
-    } catch (err) {
-      setError('Error processing standings data');
-      setIsLoading(false);
-      console.error('Error processing standings:', err);
-    }
+
+        // Calculate overall standings by summing points across all matches
+        const teamPointsMap = {};
+        const teamMatchesMap = {};
+        
+        // Process all matches
+        data.standings.forEach(match => {
+          if (match && match.teams && Array.isArray(match.teams)) {
+            match.teams.forEach(team => {
+              if (team && team.teamName) {
+                // Initialize team in map if not exists
+                if (!teamPointsMap[team.teamName]) {
+                  teamPointsMap[team.teamName] = 0;
+                  teamMatchesMap[team.teamName] = 0;
+                }
+                
+                // Add points from this match
+                teamPointsMap[team.teamName] += team.points;
+                teamMatchesMap[team.teamName] += 1;
+              }
+            });
+          }
+        });
+        
+        // Convert to array for sorting
+        const teamsArray = Object.keys(teamPointsMap).map(teamName => ({
+          teamName,
+          totalPoints: teamPointsMap[teamName],
+          matchesPlayed: teamMatchesMap[teamName],
+          avgPoints: Math.round(teamPointsMap[teamName] / teamMatchesMap[teamName])
+        }));
+        
+        // Sort by total points (descending)
+        teamsArray.sort((a, b) => b.totalPoints - a.totalPoints);
+        
+        // Assign ranks
+        teamsArray.forEach((team, index) => {
+          team.rank = index + 1;
+        });
+        
+        setOverallStandings(teamsArray);
+        setIsLoading(false);
+      } catch (err) {
+        setError('Error loading standings data: ' + err.message);
+        setIsLoading(false);
+        console.error('Error loading standings:', err);
+      }
+    };
+
+    loadStandingsData();
   }, []);
 
   // Function to determine prize money based on rank
@@ -113,7 +123,7 @@ const Standings = () => {
       </div>
       
       <div className="matches-info">
-        <p>Total Matches Processed: {standingsData.standings.length}</p>
+        <p>Total Matches Processed: {standingsData?.standings?.length || 0}</p>
       </div>
     </div>
   );

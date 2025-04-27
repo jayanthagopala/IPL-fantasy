@@ -1,0 +1,73 @@
+{
+  "standings": [
+    {
+      "matchNo": 1,
+      "match_info": {
+        "team_1": "Kolkata Knight Riders",
+        "team_2": "Royal Challengers Bengaluru",
+        "team_1_score": "174-8 (20)",
+        "team_2_score": "177-3 (16.2)",
+        "result": "RCB beat KKR by 7 wickets"
+      },
+      "teams": [
+        { "teamName": "Anantha Team", "points": 132, "rank": 1, "note": "Winner" },
+        { "teamName": "JUSTIN CHALLENGERS", "points": 125, "rank": 2 },
+        { "teamName": "Sundar Night Fury", "points": 118, "rank": 3 },
+        { "teamName": "JAYAGAN ARMY", "points": 110, "rank": 4 },
+        { "teamName": "Vjvignesh94", "points": 105, "rank": 5 },
+        { "teamName": "Devilish 11", "points": 98, "rank": 6 },
+        { "teamName": "CheemsRajah", "points": 90, "rank": 7 },
+        { "teamName": "Jais Royal Challengers", "points": 87, "rank": 8 },
+        { "teamName": "Garuda Tejas", "points": 79, "rank": 9 }
+      ]
+    },
+    {
+      "matchNo": 2,
+      "teams": [
+        { "teamName": "JAYAGAN ARMY", "points": 145, "rank": 1 },
+        { "teamName": "Devilish 11", "points": 130, "rank": 2 },
+        { "teamName": "Anantha Team", "points": 118, "rank": 3 },
+        { "teamName": "Vjvignesh94", "points": 112, "rank": 4 },
+        { "teamName": "CheemsRajah", "points": 105, "rank": 5 },
+        { "teamName": "Sundar Night Fury", "points": 98, "rank": 6 },
+        { "teamName": "JUSTIN CHALLENGERS", "points": 95, "rank": 7 },
+        { "teamName": "Garuda Tejas", "points": 88, "rank": 8 },
+        { "teamName": "Jais Royal Challengers", "points": 75, "rank": 9 }
+      ]
+    },
+    {
+      "matchNo": 3,
+      "match_info": {
+        "team_1": "Mumbai Indians",
+        "team_2": "Chennai Super Kings",
+        "team_1_score": "164-8 (20)",
+        "team_2_score": "165-4 (19.1)",
+        "result": "CSK beat MI by 6 wickets"
+      },
+      "teams": [
+        { "teamName": "CheemsRajah", "points": 138, "rank": 1 },
+        { "teamName": "Jais Royal Challengers", "points": 129, "rank": 2 },
+        { "teamName": "Vjvignesh94", "points": 122, "rank": 3 },
+        { "teamName": "Anantha Team", "points": 115, "rank": 4 },
+        { "teamName": "JUSTIN CHALLENGERS", "points": 108, "rank": 5 },
+        { "teamName": "JAYAGAN ARMY", "points": 102, "rank": 6 },
+        { "teamName": "Sundar Night Fury", "points": 95, "rank": 7 },
+        { "teamName": "Garuda Tejas", "points": 88, "rank": 8 },
+        { "teamName": "Devilish 11", "points": 82, "rank": 9 }
+      ]
+    }
+  ],
+  "defaultStanding": {
+    "teams": [
+      { "teamName": "Anantha Team", "points": 120, "rank": 1 },
+      { "teamName": "JUSTIN CHALLENGERS", "points": 115, "rank": 2 },
+      { "teamName": "Sundar Night Fury", "points": 110, "rank": 3 },
+      { "teamName": "JAYAGAN ARMY", "points": 105, "rank": 4 },
+      { "teamName": "Vjvignesh94", "points": 100, "rank": 5 },
+      { "teamName": "Devilish 11", "points": 95, "rank": 6 },
+      { "teamName": "CheemsRajah", "points": 90, "rank": 7 },
+      { "teamName": "Jais Royal Challengers", "points": 85, "rank": 8 },
+      { "teamName": "Garuda Tejas", "points": 80, "rank": 9 }
+    ]
+  }
+} 

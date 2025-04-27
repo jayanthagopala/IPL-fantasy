@@ -281,3 +281,37 @@ The function will store standings data in the S3 bucket specified in the Lambda 
 - Check CloudWatch Logs for detailed error messages
 - Verify the Lambda function has appropriate S3 permissions
 - Ensure the input JSON matches the expected format
+
+## S3 Integration for Game Standings
+
+When the application is deployed to AWS Amplify, all game standings data is saved to and retrieved from an S3 bucket. Here's how it works:
+
+### Data Flow
+
+1. Users submit game standings data through the LeaderboardSubmission component
+2. In production (`USE_LOCAL_FILES = false` in S3Service.js), the data is saved directly to the S3 bucket
+3. All components that display standings data (Standings, Schedule) fetch the data from S3 using the `fetchJsonFromS3` function
+
+### Configuration
+
+- The S3 bucket name is configured in `src/services/S3Service.js` (default: 'ipl-fantasy-data-2025')
+- The AWS region is also configured in the same file (default: 'eu-west-1')
+- Before deploying to production, ensure:
+  - The S3 bucket exists and is properly configured
+  - `USE_LOCAL_FILES` is set to `false` in S3Service.js
+  - The application has proper permissions to read/write to S3
+
+### Testing Locally
+
+For local development and testing:
+- Set `USE_LOCAL_FILES = true` in S3Service.js
+- The app will use the local JSON files in the `/public/s3-data/` directory
+- Changes will be simulated by saving to localStorage
+
+### Permissions
+
+The application requires the following permissions to interact with S3:
+- `s3:GetObject` - To read standings data
+- `s3:PutObject` - To save new standings data
+
+These permissions are configured in the application's IAM role when deployed to Amplify.

@@ -1,0 +1,1 @@
+{"statusCode":500,"body":"{\"message\":\"Error updating standings\",\"error\":\"Invalid leaderboard entry: each entry must have username, points, and rank\"}"}

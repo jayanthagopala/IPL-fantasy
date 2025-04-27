@@ -1,11 +1,11 @@
-import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 
 // S3 bucket details
 const REGION = 'eu-west-1';  // Update to match your AWS region
 const BUCKET_NAME = 'ipl-fantasy-data-2025';
 
 // Flag to determine if we should use local files for testing
-const USE_LOCAL_FILES = true; // Set to false when deploying to production
+const USE_LOCAL_FILES = false; // Set to false when deploying to production
 
 // Initialize S3 client if not using local files
 const s3Client = !USE_LOCAL_FILES ? new S3Client({ region: REGION }) : null;
@@ -32,22 +32,18 @@ export const fetchJsonFromS3 = async (key) => {
       
       return await response.json();
     } else {
-      // Real S3 implementation for production
-      // Set up the parameters for fetching the object
-      const params = {
-        Bucket: BUCKET_NAME,
-        Key: key,
-      };
-
-      // Get the object from S3
-      const command = new GetObjectCommand(params);
-      const response = await s3Client.send(command);
-
-      // Convert the response stream to text
-      const bodyContents = await streamToString(response.Body);
+      // For production - directly access the S3 file via URL
+      // This works because we've made the bucket publicly readable
+      const publicUrl = `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${key}`;
+      console.log(`Fetching from S3 URL: ${publicUrl}`);
       
-      // Parse the text as JSON
-      return JSON.parse(bodyContents);
+      const response = await fetch(publicUrl);
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch from S3: ${response.statusText}`);
+      }
+      
+      return await response.json();
     }
   } catch (error) {
     console.error(`Error fetching JSON from S3: ${error.message}`);
@@ -63,59 +59,59 @@ export const fetchJsonFromS3 = async (key) => {
  */
 export const saveLeaderboardData = async (matchNo, data) => {
   try {
-    // In local development, simulate saving to localStorage
+    // Fetch the current game standings (either from local or S3)
+    const gameStandings = await fetchJsonFromS3('game-standings.json');
+    
+    // Ensure the standings array exists
+    if (!gameStandings.standings) {
+      gameStandings.standings = [];
+    }
+    
+    // Find if there's already data for this match
+    const existingMatchIndex = gameStandings.standings.findIndex(
+      match => match && match.matchNo === matchNo
+    );
+    
+    // Convert the new data to the format expected by the standings JSON
+    const formattedData = {
+      matchNo,
+      match_info: data.match_info,
+      teams: data.leaderboard.map(item => ({
+        teamName: item.team_name,
+        points: item.points,
+        rank: item.rank,
+        ...(item.note && { note: item.note })
+      }))
+    };
+    
+    // Update or append the match data
+    if (existingMatchIndex !== -1) {
+      gameStandings.standings[existingMatchIndex] = formattedData;
+    } else {
+      gameStandings.standings.push(formattedData);
+    }
+    
+    console.log("Updated standings data:", gameStandings);
+    
     if (USE_LOCAL_FILES) {
-      // Fetch the current game standings
-      const gameStandings = await fetchJsonFromS3('game-standings.json');
-      
-      // Ensure the standings array exists
-      if (!gameStandings.standings) {
-        gameStandings.standings = [];
-      }
-      
-      // Find if there's already data for this match
-      const existingMatchIndex = gameStandings.standings.findIndex(
-        match => match && match.matchNo === matchNo
-      );
-      
-      // Convert the new data to the format expected by the standings JSON
-      const formattedData = {
-        matchNo,
-        match_info: data.match_info,
-        teams: data.leaderboard.map(item => ({
-          teamName: item.team_name,
-          points: item.points,
-          rank: item.rank,
-          ...(item.note && { note: item.note })
-        }))
+      // For local testing, save to localStorage
+      console.log(`Would save to S3: game-standings.json`);
+      localStorage.setItem('game-standings', JSON.stringify(gameStandings));
+    } else {
+      // In production, save to S3 directly
+      const params = {
+        Bucket: BUCKET_NAME,
+        Key: 'game-standings.json',
+        Body: JSON.stringify(gameStandings, null, 2),
+        ContentType: 'application/json'
       };
       
-      // Update or append the match data
-      if (existingMatchIndex !== -1) {
-        gameStandings.standings[existingMatchIndex] = formattedData;
-      } else {
-        gameStandings.standings.push(formattedData);
-      }
-      
-      console.log("Updated standings data:", gameStandings);
-      
-      // In real implementation, this would upload the file to S3
-      // For local testing, we'll just log that it would be saved
-      console.log(`Would save to S3: game-standings.json`);
-      
-      // Save to localStorage for demo purposes
-      localStorage.setItem('game-standings', JSON.stringify(gameStandings));
-      
-      return true;
-    } else {
-      // In production, this would use AWS SDK to upload to S3
-      // This would typically be done via a Lambda function or backend API
-      // as direct S3 uploads from the browser have security implications
-      
-      // For now, we'll just return a simulated success
-      console.warn("Production S3 upload not implemented yet");
-      return true;
+      const command = new PutObjectCommand(params);
+      await s3Client.send(command);
+      console.log('Successfully saved standings to S3');
     }
+    
+    return true;
   } catch (error) {
     console.error(`Error saving leaderboard data: ${error.message}`);
     throw error;

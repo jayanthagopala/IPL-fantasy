@@ -16,7 +16,7 @@
       "function": {
         "iplFantasyPointsFunction": {
           "deploymentBucketName": "amplify-iplfantasy-dev-15ee7-deployment",
-          "s3Key": "amplify-builds/iplFantasyPointsFunction-745775304b617a4d4f67-build.zip"
+          "s3Key": "amplify-builds/iplFantasyPointsFunction-437235762f5152523632-build.zip"
         }
       },
       "auth": {
