@@ -1,7 +1,7 @@
 # S3 Usage in IPL Fantasy Application
 
 ## Overview
-The IPL Fantasy application uses AWS S3 to store and retrieve JSON data that is essential for the application's functionality. This includes match schedules, game standings/leaderboards, and other related data. The S3 integration is designed to be flexible, supporting both local development and production environments.
+The IPL Fantasy application uses AWS S3 to store and retrieve JSON data that is essential for the application's functionality. The application directly interacts with S3 from the frontend for better performance and reliability.
 
 ## Key Data Files
 
@@ -82,9 +82,7 @@ Located at `src/services/S3Service.js`, this service provides the core functiona
    - In development: Saves to localStorage
    - In production: Uses AWS SDK to upload to S3
 
-## S3 Admin Interface
-
-The application includes an admin interface for managing S3 data:
+## Data Management UI
 
 ### `LeaderboardSubmission.jsx`
 - Provides a UI for updating match results and fantasy points
@@ -94,53 +92,33 @@ The application includes an admin interface for managing S3 data:
   - Validation of input data
   - Preview of changes before submission
   - Error handling and success notifications
-
-### Backend API for S3 Operations
-Located in the `/src/api` directory:
-
-1. **`s3Handler.js`**
-   - Provides server-side handling of S3 operations
-   - Implements functions for:
-     - `getFileFromS3`: Fetches files from S3
-     - `saveFileToS3`: Saves data to S3
-     - `listFilesInS3`: Lists files in an S3 directory
-
-2. **`routes.js`**
-   - Defines RESTful API endpoints for S3 operations:
-     - `GET /api/s3/file`: Retrieves a file from S3
-     - `POST /api/s3/file`: Saves a file to S3
-     - `GET /api/s3/list`: Lists files in an S3 directory
-
-## AWS Lambda Integration
-
-The application uses AWS Lambda functions for secure server-side operations:
-
-### `update-standings-lambda.js`
-- A Lambda function that safely updates standings data in S3
-- Features:
-  - Input validation
-  - Error handling
-  - Secure S3 operations
-  - Logging for monitoring
+- Uses the S3Service directly to fetch and update data in S3
 
 ## Deployment and Setup
 
 ### S3 Bucket Configuration
 - The S3 bucket is configured with:
-  - CORS settings to allow web access
-  - Public read permissions
-  - Appropriate IAM policies for write access
+  - CORS settings to allow web access from any origin
+  - Public read permissions for all files
+  - Write permissions controlled via IAM roles
 
-### Setup Scripts
-1. **`setup-s3-bucket.sh`**
-   - Creates and configures the S3 bucket
-   - Sets up CORS and bucket policies
-   - Uploads initial data files
-   - Tests access to verify setup
+### Bucket Setup Script
+The S3 bucket can be set up using AWS CLI:
 
-2. **`test-s3.sh`**
-   - Tests the local S3 integration
-   - Provides guidance for production deployment
+```bash
+# Create the bucket
+aws s3 mb s3://ipl-fantasy-data-2025 --region eu-west-1
+
+# Configure CORS
+aws s3api put-bucket-cors --bucket ipl-fantasy-data-2025 --cors-configuration file://cors.json
+
+# Set up public read access
+aws s3api put-bucket-policy --bucket ipl-fantasy-data-2025 --policy file://bucket-policy.json
+
+# Upload initial data files
+aws s3 cp public/s3-data/game-standings.json s3://ipl-fantasy-data-2025/game-standings.json --content-type application/json
+aws s3 cp public/s3-data/ipl-schedule-json.json s3://ipl-fantasy-data-2025/ipl-schedule-json.json --content-type application/json
+```
 
 ## Development vs. Production
 
@@ -152,21 +130,16 @@ The application uses AWS Lambda functions for secure server-side operations:
 ### Production Environment
 - `USE_LOCAL_FILES = false` in S3Service.js
 - Directly interacts with S3 bucket
-- Requires proper AWS credentials and IAM permissions
+- Requires an S3 bucket with the correct permissions
 
 ## Security Considerations
 
 - S3 bucket is publicly readable to allow frontend access
-- Write operations are secured via:
-  - Lambda functions with proper IAM roles
-  - Server-side API endpoints with authentication
-- IAM permissions are limited to necessary actions:
-  - `s3:GetObject`: For reading data
-  - `s3:PutObject`: For writing data
-  - `s3:ListBucket`: For listing contents
+- Write operations are secured via AWS SDK credentials
+- AWS SDK uses the application's Amplify credentials for authenticated S3 access
 
 ## Performance Optimizations
 
 - Direct S3 URL access for public read operations
-- File caching for frequently accessed data
+- Client-side caching for frequently accessed data
 - Batch updates for standings to minimize write operations 

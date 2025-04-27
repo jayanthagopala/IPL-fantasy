@@ -200,35 +200,6 @@
           ]
         }
       }
-    },
-    "CustomLambdaExecutionPolicy": {
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyName": "custom-lambda-execution-policy",
-        "PolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Action": [
-                "s3:GetObject",
-                "s3:PutObject",
-                "s3:ListBucket"
-              ],
-              "Resource": [
-                "arn:aws:s3:::ipl-fantasy-data-2025/*",
-                "arn:aws:s3:::ipl-fantasy-data-2025"
-              ],
-              "Effect": "Allow"
-            }
-          ]
-        },
-        "Roles": [
-          {
-            "Ref": "LambdaExecutionRole"
-          }
-        ]
-      },
-      "DependsOn": "LambdaExecutionRole"
     }
   },
   "Outputs": {

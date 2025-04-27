@@ -2,13 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient();
-const s3 = new AWS.S3();
-
-// Configure S3 bucket name - should match the one in frontend
-const BUCKET_NAME = 'ipl-fantasy-data-2025';
 
 const app = express();
 app.use(bodyParser.json());
+
+// Add a health check endpoint
+app.get('/health', function(req, res) {
+  res.json({ status: 'ok', message: 'IPL Fantasy API is running' });
+});
 
 // DynamoDB routes
 app.get('/items', async function(req, res) {
@@ -38,114 +39,6 @@ app.post('/item', async function(req, res) {
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
-  }
-});
-
-// S3 routes
-// Get file from S3
-app.get('/s3/file', async function(req, res) {
-  const { key } = req.query;
-  
-  if (!key) {
-    return res.status(400).json({
-      success: false,
-      message: 'File key is required'
-    });
-  }
-
-  const params = {
-    Bucket: BUCKET_NAME,
-    Key: key
-  };
-
-  try {
-    const data = await s3.getObject(params).promise();
-    const jsonData = JSON.parse(data.Body.toString('utf-8'));
-    
-    return res.json({
-      success: true,
-      data: jsonData
-    });
-  } catch (error) {
-    // Handle case where file doesn't exist
-    if (error.code === 'NoSuchKey') {
-      return res.status(404).json({
-        success: false,
-        message: 'File not found'
-      });
-    }
-
-    console.error('Error fetching from S3:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Error retrieving file from S3',
-      error: error.message
-    });
-  }
-});
-
-// Save file to S3
-app.post('/s3/file', async function(req, res) {
-  const { key, data } = req.body;
-  
-  if (!key || !data) {
-    return res.status(400).json({
-      success: false,
-      message: 'File key and data are required'
-    });
-  }
-
-  const params = {
-    Bucket: BUCKET_NAME,
-    Key: key,
-    Body: JSON.stringify(data, null, 2),
-    ContentType: 'application/json'
-  };
-
-  try {
-    await s3.putObject(params).promise();
-    
-    return res.json({
-      success: true,
-      message: 'File saved successfully'
-    });
-  } catch (error) {
-    console.error('Error saving to S3:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Error saving file to S3',
-      error: error.message
-    });
-  }
-});
-
-// List files in S3
-app.get('/s3/list', async function(req, res) {
-  const { prefix } = req.query;
-  
-  const params = {
-    Bucket: BUCKET_NAME,
-    Prefix: prefix || ''
-  };
-
-  try {
-    const data = await s3.listObjectsV2(params).promise();
-    
-    return res.json({
-      success: true,
-      files: data.Contents.map(item => ({
-        key: item.Key,
-        size: item.Size,
-        lastModified: item.LastModified
-      }))
-    });
-  } catch (error) {
-    console.error('Error listing S3 files:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Error listing files in S3',
-      error: error.message
-    });
   }
 });
 

@@ -1,13 +1,6 @@
 [
   {
-    "Action": [
-      "s3:GetObject",
-      "s3:PutObject",
-      "s3:ListBucket"
-    ],
-    "Resource": [
-      "arn:aws:s3:::ipl-fantasy-data-2025/*",
-      "arn:aws:s3:::ipl-fantasy-data-2025"
-    ]
+    "Action": [],
+    "Resource": []
   }
 ]
